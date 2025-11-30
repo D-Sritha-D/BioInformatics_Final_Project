@@ -5,7 +5,7 @@ import {
   AlignmentResult,
   StepVisualizer,
 } from './components';
-import { globalAlignment, bandedAlignment } from './algorithms';
+import { globalAlignment, localAlignment, dovetailAlignment, bandedAlignment } from './algorithms';
 import type {
   AlgorithmType,
   ScoringParams,
@@ -42,6 +42,10 @@ function App() {
 
       if (algo === 'global') {
         alignmentResult = globalAlignment(seq1, seq2, params);
+      } else if (algo === 'local') {
+        alignmentResult = localAlignment(seq1, seq2, params);
+      } else if (algo === 'dovetail') {
+        alignmentResult = dovetailAlignment(seq1, seq2, params);
       } else {
         const bandedParams = params as BandedParams;
         setBandwidth(bandedParams.bandwidth);
@@ -65,7 +69,7 @@ function App() {
     <div className="app">
       <header className="app-header">
         <div className="header-content">
-          <h1>🧬 BioInsight: Algorithm Visualizer</h1>
+          <h1>🧬 Sequence Alignment</h1>
           <p className="subtitle">
             Interactive visualization of bioinformatics alignment algorithms
           </p>
@@ -103,25 +107,38 @@ function App() {
               />
             </div>
 
-            <div className="matrix-section">
-              <h2>Dynamic Programming Matrix</h2>
-              <AlignmentMatrix
-                matrix={result.matrix}
-                seq1={sequences.seq1}
-                seq2={sequences.seq2}
-                currentStep={showStepVisualizer ? currentStep : undefined}
-                showBand={algorithm === 'banded'}
-                bandwidth={bandwidth}
-              />
-            </div>
-
-            {showStepVisualizer && result.steps.length > 0 && (
-              <div className="step-section">
-                <StepVisualizer
-                  steps={result.steps}
-                  onStepChange={handleStepChange}
-                  isPlaying={isPlaying}
-                  onPlayPause={handlePlayPause}
+            {showStepVisualizer && result.steps.length > 0 ? (
+              <div className="step-by-step-layout">
+                <div className="matrix-with-controls">
+                  <h2>Dynamic Programming Matrix</h2>
+                  <AlignmentMatrix
+                    matrix={result.matrix}
+                    seq1={sequences.seq1}
+                    seq2={sequences.seq2}
+                    currentStep={currentStep}
+                    showBand={algorithm === 'banded'}
+                    bandwidth={bandwidth}
+                  />
+                </div>
+                <div className="step-section">
+                  <StepVisualizer
+                    steps={result.steps}
+                    onStepChange={handleStepChange}
+                    isPlaying={isPlaying}
+                    onPlayPause={handlePlayPause}
+                  />
+                </div>
+              </div>
+            ) : (
+              <div className="matrix-section">
+                <h2>Dynamic Programming Matrix</h2>
+                <AlignmentMatrix
+                  matrix={result.matrix}
+                  seq1={sequences.seq1}
+                  seq2={sequences.seq2}
+                  currentStep={undefined}
+                  showBand={algorithm === 'banded'}
+                  bandwidth={bandwidth}
                 />
               </div>
             )}
@@ -144,6 +161,34 @@ function App() {
           </div>
 
           <div className="algorithm-info-card">
+            <h3>🔍 Local Alignment (Smith-Waterman)</h3>
+            <p>
+              The Smith-Waterman algorithm finds the best local alignment by
+              identifying the highest-scoring subsequence match. Negative scores
+              reset to zero, allowing alignment to start and end anywhere.
+            </p>
+            <ul>
+              <li>Time Complexity: O(m × n)</li>
+              <li>Space Complexity: O(m × n)</li>
+              <li>Best for: Finding conserved regions or motifs</li>
+            </ul>
+          </div>
+
+          <div className="algorithm-info-card">
+            <h3>🔗 Dovetail Alignment (Semi-Global)</h3>
+            <p>
+              Dovetail alignment finds overlapping alignments between sequences,
+              allowing free gaps at sequence ends. It's ideal for sequence
+              assembly where fragments overlap.
+            </p>
+            <ul>
+              <li>Time Complexity: O(m × n)</li>
+              <li>Space Complexity: O(m × n)</li>
+              <li>Best for: Sequence assembly, finding overlaps</li>
+            </ul>
+          </div>
+
+          <div className="algorithm-info-card">
             <h3>📏 Banded Alignment</h3>
             <p>
               Banded alignment is an optimization that only considers cells within
@@ -161,7 +206,7 @@ function App() {
 
       <footer className="app-footer">
         <p>
-          Built for educational purposes | BioInsight: Algorithm Visualizer
+          Built for educational purposes | Sequence Alignment Visualizer
         </p>
       </footer>
     </div>

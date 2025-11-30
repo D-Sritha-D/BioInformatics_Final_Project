@@ -1,8 +1,18 @@
 /**
- * Needleman-Wunsch Global Alignment Algorithm
+ * Dovetail (Semi-Global) Alignment Algorithm
  * 
- * This algorithm finds the optimal global alignment between two sequences
- * using dynamic programming. It considers the entire length of both sequences.
+ * Dovetail alignment is designed for overlapping sequences, such as when
+ * assembling DNA fragments. It allows free gaps at the beginning of one
+ * sequence and the end of the other (or vice versa).
+ * 
+ * This is useful for:
+ * - Sequence assembly (finding overlaps between reads)
+ * - Finding how two sequences overlap at their ends
+ * 
+ * Key differences from global alignment:
+ * 1. No penalty for gaps at the start of seq1 or seq2 (first row/col = 0)
+ * 2. Traceback can start from the last row or last column (not just bottom-right)
+ * 3. No penalty for trailing gaps at the end
  */
 
 import { Direction } from '../../types';
@@ -15,19 +25,16 @@ import type {
 
 /**
  * Initialize the DP matrix with base cases
+ * For dovetail: first row and first column are all 0 (no gap penalty for leading gaps)
  */
-function initializeMatrix(
-  rows: number,
-  cols: number,
-  gapPenalty: number
-): MatrixCell[][] {
+function initializeMatrix(rows: number, cols: number): MatrixCell[][] {
   const matrix: MatrixCell[][] = [];
 
   for (let i = 0; i < rows; i++) {
     matrix[i] = [];
     for (let j = 0; j < cols; j++) {
       matrix[i][j] = {
-        score: 0,
+        score: 0, // No penalty for leading gaps
         direction: Direction.NONE,
         row: i,
         col: j,
@@ -36,16 +43,14 @@ function initializeMatrix(
     }
   }
 
-  // Initialize first row (gaps in sequence 1)
-  for (let j = 0; j < cols; j++) {
-    matrix[0][j].score = j * gapPenalty;
-    matrix[0][j].direction = j === 0 ? Direction.NONE : Direction.LEFT;
+  // First row: direction is LEFT (but score stays 0)
+  for (let j = 1; j < cols; j++) {
+    matrix[0][j].direction = Direction.LEFT;
   }
 
-  // Initialize first column (gaps in sequence 2)
-  for (let i = 0; i < rows; i++) {
-    matrix[i][0].score = i * gapPenalty;
-    matrix[i][0].direction = i === 0 ? Direction.NONE : Direction.UP;
+  // First column: direction is UP (but score stays 0)
+  for (let i = 1; i < rows; i++) {
+    matrix[i][0].direction = Direction.UP;
   }
 
   return matrix;
@@ -131,21 +136,70 @@ function fillMatrix(
 }
 
 /**
- * Traceback through the matrix to find the optimal alignment
+ * Find the best starting cell for traceback
+ * For dovetail: can start from last row or last column (whichever has highest score)
+ */
+function findBestEndCell(
+  matrix: MatrixCell[][]
+): { row: number; col: number; score: number } {
+  const rows = matrix.length;
+  const cols = matrix[0].length;
+  let bestCell = { row: rows - 1, col: cols - 1, score: matrix[rows - 1][cols - 1].score };
+
+  // Check last row (seq1 fully aligned, seq2 may have trailing gap)
+  for (let j = 0; j < cols; j++) {
+    if (matrix[rows - 1][j].score > bestCell.score) {
+      bestCell = { row: rows - 1, col: j, score: matrix[rows - 1][j].score };
+    }
+  }
+
+  // Check last column (seq2 fully aligned, seq1 may have trailing gap)
+  for (let i = 0; i < rows; i++) {
+    if (matrix[i][cols - 1].score > bestCell.score) {
+      bestCell = { row: i, col: cols - 1, score: matrix[i][cols - 1].score };
+    }
+  }
+
+  return bestCell;
+}
+
+/**
+ * Traceback through the matrix to find the optimal dovetail alignment
  */
 function traceback(
   matrix: MatrixCell[][],
   seq1: string,
-  seq2: string
+  seq2: string,
+  startCell: { row: number; col: number }
 ): { alignedSeq1: string; alignedSeq2: string; path: Array<{ row: number; col: number }> } {
   let alignedSeq1 = '';
   let alignedSeq2 = '';
   const path: Array<{ row: number; col: number }> = [];
 
-  let i = matrix.length - 1;
-  let j = matrix[0].length - 1;
+  const rows = matrix.length;
+  const cols = matrix[0].length;
 
-  while (i > 0 || j > 0) {
+  let i = startCell.row;
+  let j = startCell.col;
+
+  // Add trailing gaps if we didn't start at bottom-right
+  if (i < rows - 1) {
+    // Add gaps for remaining seq1
+    for (let k = rows - 1; k > i; k--) {
+      alignedSeq1 = seq1[k - 1] + alignedSeq1;
+      alignedSeq2 = '-' + alignedSeq2;
+    }
+  }
+  if (j < cols - 1) {
+    // Add gaps for remaining seq2
+    for (let k = cols - 1; k > j; k--) {
+      alignedSeq1 = '-' + alignedSeq1;
+      alignedSeq2 = seq2[k - 1] + alignedSeq2;
+    }
+  }
+
+  // Standard traceback
+  while (i > 0 && j > 0) {
     path.push({ row: i, col: j });
     matrix[i][j].isOnPath = true;
 
@@ -167,6 +221,22 @@ function traceback(
     }
   }
 
+  // Handle remaining characters (leading gaps - no penalty in dovetail)
+  while (i > 0) {
+    alignedSeq1 = seq1[i - 1] + alignedSeq1;
+    alignedSeq2 = '-' + alignedSeq2;
+    path.push({ row: i, col: 0 });
+    matrix[i][0].isOnPath = true;
+    i--;
+  }
+  while (j > 0) {
+    alignedSeq1 = '-' + alignedSeq1;
+    alignedSeq2 = seq2[j - 1] + alignedSeq2;
+    path.push({ row: 0, col: j });
+    matrix[0][j].isOnPath = true;
+    j--;
+  }
+
   path.push({ row: 0, col: 0 });
   matrix[0][0].isOnPath = true;
 
@@ -174,9 +244,9 @@ function traceback(
 }
 
 /**
- * Main function to perform Needleman-Wunsch global alignment
+ * Main function to perform dovetail (semi-global) alignment
  */
-export function globalAlignment(
+export function dovetailAlignment(
   seq1: string,
   seq2: string,
   params: ScoringParams
@@ -184,20 +254,23 @@ export function globalAlignment(
   const rows = seq1.length + 1;
   const cols = seq2.length + 1;
 
-  // Initialize matrix
-  const matrix = initializeMatrix(rows, cols, params.gapPenalty);
+  // Initialize matrix (no penalty for leading gaps)
+  const matrix = initializeMatrix(rows, cols);
 
   // Fill matrix and get steps
   const steps = fillMatrix(matrix, seq1, seq2, params);
 
+  // Find best cell to start traceback (can be last row or last column)
+  const bestEndCell = findBestEndCell(matrix);
+
   // Traceback to find alignment
-  const { alignedSeq1, alignedSeq2, path } = traceback(matrix, seq1, seq2);
+  const { alignedSeq1, alignedSeq2, path } = traceback(matrix, seq1, seq2, bestEndCell);
 
   return {
     matrix,
     alignedSeq1,
     alignedSeq2,
-    score: matrix[rows - 1][cols - 1].score,
+    score: bestEndCell.score,
     path,
     steps,
   };

@@ -1,57 +1,63 @@
 .result-container {
-  background: #ffffff;
-  border-radius: 12px;
-  padding: 24px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background: var(--tile-bg);
+  border-radius: 20px;
+  padding: 28px;
+  box-shadow: 0 8px 32px rgba(45, 27, 78, 0.1);
+  border: 1px solid rgba(45, 27, 78, 0.05);
 }
 
 .result-container h2 {
   margin-top: 0;
-  margin-bottom: 20px;
-  color: #2c3e50;
+  margin-bottom: 24px;
+  color: var(--text-primary);
+  font-weight: 700;
 }
 
 .result-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 24px;
-  padding-bottom: 16px;
-  border-bottom: 2px solid #eee;
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid var(--bg-secondary);
 }
 
 .algorithm-badge {
-  background: linear-gradient(135deg, #3498db, #2980b9);
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
   color: white;
-  padding: 8px 16px;
-  border-radius: 20px;
+  padding: 10px 20px;
+  border-radius: 50px;
   font-weight: 600;
   font-size: 14px;
+  box-shadow: 0 4px 12px rgba(45, 27, 78, 0.2);
 }
 
 .score-display {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
 
 .score-label {
-  color: #7f8c8d;
+  color: var(--text-muted);
   font-size: 14px;
+  font-weight: 500;
 }
 
 .score-value {
-  font-size: 28px;
-  font-weight: 700;
-  color: #2ecc71;
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--success);
+  text-shadow: 0 2px 8px rgba(46, 204, 113, 0.2);
 }
 
 .alignment-display {
-  background: #f8f9fa;
-  border-radius: 8px;
-  padding: 20px;
-  margin-bottom: 24px;
+  background: linear-gradient(135deg, var(--bg-secondary), rgba(45, 27, 78, 0.03));
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 28px;
   overflow-x: auto;
+  border: 1px solid rgba(45, 27, 78, 0.05);
 }
 
 .sequence-row,
@@ -133,36 +139,43 @@
 
 .stat-item {
   text-align: center;
-  padding: 16px;
-  background: #f8f9fa;
-  border-radius: 8px;
+  padding: 20px 16px;
+  background: linear-gradient(135deg, var(--bg-secondary), rgba(45, 27, 78, 0.02));
+  border-radius: 14px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(45, 27, 78, 0.05);
+}
+
+.stat-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(45, 27, 78, 0.1);
 }
 
 .stat-value {
   display: block;
-  font-size: 24px;
-  font-weight: 700;
-  margin-bottom: 4px;
+  font-size: 28px;
+  font-weight: 800;
+  margin-bottom: 6px;
 }
 
 .stat-value.matches {
-  color: #27ae60;
+  color: var(--success);
 }
 
 .stat-value.mismatches {
-  color: #e74c3c;
+  color: var(--error);
 }
 
 .stat-value.gaps {
-  color: #7f8c8d;
+  color: var(--text-muted);
 }
 
 .stat-value.identity {
-  color: #3498db;
+  color: var(--primary);
 }
 
 .stat-value.coverage {
-  color: #9b59b6;
+  color: var(--primary-light);
 }
 
 .stat-label {
