@@ -4,6 +4,7 @@ import {
   AlignmentMatrix,
   AlignmentResult,
   StepVisualizer,
+  Homepage,
 } from './components';
 import { globalAlignment, localAlignment, dovetailAlignment, bandedAlignment } from './algorithms';
 import type {
@@ -15,6 +16,7 @@ import type {
 import './App.css';
 
 function App() {
+  const [showHomepage, setShowHomepage] = useState(true);
   const [result, setResult] = useState<AlignmentResultType | null>(null);
   const [sequences, setSequences] = useState<{ seq1: string; seq2: string }>({
     seq1: '',
@@ -65,6 +67,18 @@ function App() {
     setIsPlaying((prev) => !prev);
   }, []);
 
+  const handleNavigateToVisualizer = useCallback(() => {
+    setShowHomepage(false);
+  }, []);
+
+  const handleNavigateToHomepage = useCallback(() => {
+    setShowHomepage(true);
+  }, []);
+
+  if (showHomepage) {
+    return <Homepage onNavigateToVisualizer={handleNavigateToVisualizer} />;
+  }
+
   return (
     <div className="app">
       <header className="app-header">
@@ -73,6 +87,23 @@ function App() {
           <p className="subtitle">
             Interactive visualization of bioinformatics alignment algorithms
           </p>
+          <button
+            onClick={handleNavigateToHomepage}
+            style={{
+              marginTop: '1rem',
+              padding: '0.5rem 1.5rem',
+              background: 'rgba(255, 255, 255, 0.2)',
+              border: '1px solid rgba(255, 255, 255, 0.5)',
+              borderRadius: '8px',
+              color: '#ffffff',
+              fontSize: '0.9rem',
+              fontWeight: '500',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+            }}
+          >
+            ← Back to Homepage
+          </button>
         </div>
       </header>
 
