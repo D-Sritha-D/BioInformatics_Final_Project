@@ -112,7 +112,7 @@ function fillMatrix(
 
       // Find the maximum score and direction
       const maxScore = Math.max(diagonalScore, upScore, leftScore);
-      let direction: Direction;
+      let direction: Direction = Direction.DIAGONAL;
 
       if (maxScore === diagonalScore) {
         direction = Direction.DIAGONAL;
@@ -164,13 +164,13 @@ function fillMatrix(
 }
 
 /**
- * Perform traceback to find the optimal alignment
+ * Traceback through the matrix to find the optimal alignment
  */
 function traceback(
   matrix: MatrixCell[][],
   seq1: string,
   seq2: string,
-  bandwidth: number
+  _bandwidth: number
 ): { alignedSeq1: string; alignedSeq2: string; path: Array<{ row: number; col: number }> } {
   let alignedSeq1 = '';
   let alignedSeq2 = '';
@@ -178,11 +178,6 @@ function traceback(
 
   let i = matrix.length - 1;
   let j = matrix[0].length - 1;
-
-  // Check if the endpoint is reachable within the band
-  if (!isInBand(i, j, bandwidth)) {
-    console.warn('Endpoint not reachable within band. Bandwidth may be too small.');
-  }
 
   while (i > 0 || j > 0) {
     path.push({ row: i, col: j });
@@ -199,12 +194,10 @@ function traceback(
       alignedSeq1 = seq1[i - 1] + alignedSeq1;
       alignedSeq2 = '-' + alignedSeq2;
       i--;
-    } else if (direction === Direction.LEFT) {
+    } else {
       alignedSeq1 = '-' + alignedSeq1;
       alignedSeq2 = seq2[j - 1] + alignedSeq2;
       j--;
-    } else {
-      break;
     }
   }
 
@@ -238,8 +231,13 @@ export function bandedAlignment(
     bandwidth: effectiveBandwidth,
   });
 
-  // Perform traceback
-  const { alignedSeq1, alignedSeq2, path } = traceback(matrix, seq1, seq2, effectiveBandwidth);
+  // Traceback to find alignment
+  const { alignedSeq1, alignedSeq2, path } = traceback(
+    matrix,
+    seq1,
+    seq2,
+    effectiveBandwidth
+  );
 
   return {
     matrix,

@@ -58,7 +58,7 @@ export interface BandedParams extends ScoringParams {
 }
 
 // Algorithm type
-export type AlgorithmType = 'global' | 'banded';
+export type AlgorithmType = 'global' | 'local' | 'dovetail' | 'banded';
 
 // Sequence type
 export type SequenceType = 'dna' | 'protein';

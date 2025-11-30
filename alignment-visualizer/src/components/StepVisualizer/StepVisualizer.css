@@ -1,14 +1,17 @@
 .step-visualizer {
-  background: #ffffff;
-  border-radius: 12px;
-  padding: 24px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background: var(--tile-bg);
+  border-radius: 20px;
+  padding: 28px;
+  box-shadow: 0 8px 32px rgba(45, 27, 78, 0.1);
+  border: 1px solid rgba(45, 27, 78, 0.05);
 }
 
 .step-visualizer h3 {
   margin-top: 0;
-  margin-bottom: 20px;
-  color: #2c3e50;
+  margin-bottom: 24px;
+  color: var(--text-primary);
+  font-weight: 700;
+  font-size: 1.25rem;
 }
 
 .controls {
@@ -20,21 +23,23 @@
 }
 
 .control-btn {
-  padding: 10px 16px;
-  border: 2px solid #e0e0e0;
-  background: #ffffff;
-  border-radius: 8px;
+  padding: 12px 18px;
+  border: 2px solid var(--border-color);
+  background: var(--tile-bg);
+  border-radius: 12px;
   cursor: pointer;
   font-size: 14px;
-  font-weight: 500;
-  color: #555;
-  transition: all 0.2s;
+  font-weight: 600;
+  color: var(--text-secondary);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .control-btn:hover:not(:disabled) {
-  background: #f8f9fa;
-  border-color: #3498db;
-  color: #3498db;
+  background: var(--bg-secondary);
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(45, 27, 78, 0.1);
 }
 
 .control-btn:disabled {
@@ -43,16 +48,18 @@
 }
 
 .control-btn.play-btn {
-  background: linear-gradient(135deg, #3498db, #2980b9);
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
   color: white;
   border-color: transparent;
-  min-width: 100px;
+  min-width: 110px;
+  box-shadow: 0 4px 16px rgba(45, 27, 78, 0.2);
 }
 
 .control-btn.play-btn:hover {
-  background: linear-gradient(135deg, #2980b9, #2471a3);
+  background: linear-gradient(135deg, var(--primary-light), var(--primary));
   border-color: transparent;
   color: white;
+  box-shadow: 0 6px 20px rgba(45, 27, 78, 0.3);
 }
 
 .progress-section {
@@ -64,7 +71,7 @@
   height: 8px;
   -webkit-appearance: none;
   appearance: none;
-  background: #e0e0e0;
+  background: var(--border-color);
   border-radius: 4px;
   outline: none;
   cursor: pointer;
@@ -75,7 +82,7 @@
   appearance: none;
   width: 20px;
   height: 20px;
-  background: #3498db;
+  background: var(--primary);
   border-radius: 50%;
   cursor: pointer;
   transition: transform 0.2s;
@@ -88,7 +95,7 @@
 .progress-slider::-moz-range-thumb {
   width: 20px;
   height: 20px;
-  background: #3498db;
+  background: var(--primary);
   border-radius: 50%;
   cursor: pointer;
   border: none;
@@ -123,34 +130,36 @@
 }
 
 .step-details {
-  background: #f8f9fa;
-  border-radius: 8px;
-  padding: 20px;
-  margin-top: 16px;
+  background: linear-gradient(135deg, var(--bg-secondary), rgba(45, 27, 78, 0.03));
+  border-radius: 14px;
+  padding: 24px;
+  margin-top: 20px;
+  border: 1px solid rgba(45, 27, 78, 0.05);
 }
 
 .step-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 12px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid #e0e0e0;
+  margin-bottom: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border-color);
 }
 
 .step-position {
-  font-weight: 600;
-  color: #2c3e50;
-  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+  font-size: 17px;
 }
 
 .step-score {
-  background: #2ecc71;
+  background: var(--primary);
   color: white;
-  padding: 4px 12px;
-  border-radius: 12px;
-  font-weight: 600;
+  padding: 6px 16px;
+  border-radius: 20px;
+  font-weight: 700;
   font-size: 14px;
+  box-shadow: 0 2px 8px rgba(45, 27, 78, 0.2);
 }
 
 .step-explanation {
@@ -165,7 +174,7 @@
 
 .cells-considered h4 {
   margin: 0 0 12px 0;
-  color: #2c3e50;
+  color: var(--text-primary);
   font-size: 14px;
 }
 
@@ -174,8 +183,8 @@
   align-items: center;
   gap: 12px;
   padding: 10px 14px;
-  background: white;
-  border: 2px solid #e0e0e0;
+  background: var(--tile-bg);
+  border: 2px solid var(--border-color);
   border-radius: 6px;
   margin-bottom: 8px;
   font-family: 'Courier New', monospace;
@@ -183,13 +192,13 @@
 }
 
 .cell-option.selected {
-  border-color: #2ecc71;
-  background: #d4edda;
+  border-color: var(--primary);
+  background: rgba(45, 27, 78, 0.1);
 }
 
 .option-source {
   font-weight: 600;
-  color: #555;
+  color: var(--text-secondary);
   min-width: 80px;
 }
 
@@ -200,13 +209,13 @@
 
 .option-value {
   font-weight: 600;
-  color: #2c3e50;
+  color: var(--text-primary);
 }
 
 .chosen-direction {
   padding: 12px;
-  background: #d4edda;
+  background: rgba(45, 27, 78, 0.1);
   border-radius: 6px;
-  color: #155724;
+  color: var(--primary);
   text-transform: capitalize;
 }

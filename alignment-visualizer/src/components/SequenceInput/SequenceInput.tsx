@@ -98,8 +98,6 @@ export function SequenceInput({ onAlign }: SequenceInputProps) {
 
   return (
     <div className="sequence-input-container">
-      <h2>Sequence Alignment Parameters</h2>
-      
       <form onSubmit={handleSubmit}>
         <div className="input-section">
           <div className="sequence-type-selector">
@@ -173,6 +171,34 @@ export function SequenceInput({ onAlign }: SequenceInputProps) {
                 <strong>Global Alignment</strong>
                 <span>(Needleman-Wunsch)</span>
                 <p>Aligns entire sequences end-to-end</p>
+              </div>
+            </label>
+
+            <label className={`algorithm-option ${algorithm === 'local' ? 'selected' : ''}`}>
+              <input
+                type="radio"
+                value="local"
+                checked={algorithm === 'local'}
+                onChange={(e) => setAlgorithm(e.target.value as AlgorithmType)}
+              />
+              <div className="algorithm-info">
+                <strong>Local Alignment</strong>
+                <span>(Smith-Waterman)</span>
+                <p>Finds best matching subsequences</p>
+              </div>
+            </label>
+
+            <label className={`algorithm-option ${algorithm === 'dovetail' ? 'selected' : ''}`}>
+              <input
+                type="radio"
+                value="dovetail"
+                checked={algorithm === 'dovetail'}
+                onChange={(e) => setAlgorithm(e.target.value as AlgorithmType)}
+              />
+              <div className="algorithm-info">
+                <strong>Dovetail Alignment</strong>
+                <span>(Semi-Global)</span>
+                <p>Finds overlapping sequence alignments</p>
               </div>
             </label>
 
