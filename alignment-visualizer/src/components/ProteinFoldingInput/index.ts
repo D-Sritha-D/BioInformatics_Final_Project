@@ -1,0 +1,1 @@
+export { ProteinFoldingInput } from './ProteinFoldingInput';

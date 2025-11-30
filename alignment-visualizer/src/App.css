@@ -30,6 +30,31 @@
   color: #e2e8f0;
 }
 
+.nav-toggle {
+  margin-top: 16px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.nav-btn {
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.nav-btn.active {
+  background: #f6e05e;
+  color: #1a365d;
+  border-color: #f6e05e;
+  box-shadow: 0 10px 22px rgba(246, 224, 94, 0.4);
+}
+
 .app-main {
   flex: 1;
   max-width: 1400px;
@@ -135,6 +160,26 @@
   opacity: 0.9;
 }
 
+.folding-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+.folding-results {
+  display: grid;
+  gap: 16px;
+}
+
+.folding-placeholder {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  border: 1px dashed #cbd5e0;
+  color: #2d3748;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.05);
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .header-content h1 {
@@ -147,5 +192,12 @@
 
   .info-section {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 1024px) {
+  .folding-grid {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
   }
 }

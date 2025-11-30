@@ -1,0 +1,115 @@
+.protein-input-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 24px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.card-header h2 {
+  margin: 0 0 6px;
+  font-size: 1.4rem;
+}
+
+.card-header p {
+  margin: 0;
+  color: #4a5568;
+}
+
+.protein-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.input-label {
+  font-weight: 600;
+  color: #2c5282;
+}
+
+.protein-form textarea {
+  width: 100%;
+  border: 1px solid #d6e0ef;
+  border-radius: 10px;
+  padding: 12px;
+  font-size: 0.95rem;
+  resize: vertical;
+}
+
+.algo-toggle {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.pill-btn {
+  border: 1px solid #cbd5e0;
+  background: #f7fafc;
+  color: #1a365d;
+  padding: 10px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.pill-btn.selected {
+  background: #2b6cb0;
+  color: #fff;
+  border-color: #2b6cb0;
+  box-shadow: 0 4px 12px rgba(43, 108, 176, 0.25);
+}
+
+.params-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.param-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.param-field label {
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.param-field input {
+  border: 1px solid #d6e0ef;
+  border-radius: 8px;
+  padding: 8px 10px;
+}
+
+.primary-btn {
+  align-self: flex-start;
+  background: linear-gradient(120deg, #2563eb, #38bdf8);
+  color: #fff;
+  border: none;
+  padding: 12px 18px;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 8px 16px rgba(37, 99, 235, 0.25);
+}
+
+.primary-btn:hover {
+  opacity: 0.95;
+}
+
+.input-error {
+  color: #c53030;
+  margin: 0;
+  font-weight: 600;
+}

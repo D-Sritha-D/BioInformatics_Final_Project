@@ -1,0 +1,1 @@
+export { ProteinFoldingResult } from './ProteinFoldingResult';
