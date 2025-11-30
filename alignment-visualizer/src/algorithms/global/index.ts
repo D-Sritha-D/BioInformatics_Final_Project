@@ -1,0 +1,1 @@
+export { globalAlignment } from './needlemanWunsch';

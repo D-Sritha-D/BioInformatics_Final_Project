@@ -1,0 +1,151 @@
+* {
+  box-sizing: border-box;
+}
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #f0f4f8;
+}
+
+.app-header {
+  background: linear-gradient(135deg, #1a365d, #2c5282);
+  color: white;
+  padding: 32px 24px;
+  text-align: center;
+}
+
+.header-content h1 {
+  margin: 0 0 8px 0;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.header-content .subtitle {
+  margin: 0;
+  opacity: 0.9;
+  font-size: 1.1rem;
+  color: #e2e8f0;
+}
+
+.app-main {
+  flex: 1;
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.input-panel {
+  margin-bottom: 24px;
+}
+
+.results-panel {
+  margin-bottom: 32px;
+}
+
+.visualization-controls {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.viz-toggle {
+  padding: 12px 24px;
+  border: 2px solid #3498db;
+  background: white;
+  color: #3498db;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.viz-toggle:hover {
+  background: #ebf5fb;
+}
+
+.viz-toggle.active {
+  background: #3498db;
+  color: white;
+}
+
+.result-section,
+.matrix-section,
+.step-section {
+  margin-bottom: 24px;
+}
+
+.matrix-section h2 {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 16px;
+}
+
+.info-section {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 24px;
+  margin-top: 32px;
+}
+
+.algorithm-info-card {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.algorithm-info-card h3 {
+  margin-top: 0;
+  color: #2c3e50;
+  font-size: 1.25rem;
+  margin-bottom: 12px;
+}
+
+.algorithm-info-card p {
+  color: #555;
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.algorithm-info-card ul {
+  margin: 0;
+  padding-left: 20px;
+  color: #666;
+}
+
+.algorithm-info-card li {
+  margin-bottom: 6px;
+}
+
+.app-footer {
+  background: #2c3e50;
+  color: white;
+  text-align: center;
+  padding: 20px;
+  margin-top: auto;
+}
+
+.app-footer p {
+  margin: 0;
+  opacity: 0.9;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .header-content h1 {
+    font-size: 1.75rem;
+  }
+
+  .app-main {
+    padding: 16px;
+  }
+
+  .info-section {
+    grid-template-columns: 1fr;
+  }
+}

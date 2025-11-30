@@ -1,62 +1,104 @@
-# Bioinformatics Visualization Project
+# 🧬 BioInsight: Algorithm Visualizer
 
 ## Overview
-This project focuses on visualizing bioinformatics data to derive meaningful insights from biological datasets.
+An interactive web-based educational tool for visualizing and understanding fundamental sequence alignment algorithms in bioinformatics. This tool provides step-by-step visualizations of key algorithms, making abstract algorithmic concepts concrete through visualization.
 
-## Algorithms
-# Alignment
-- Global 
-- Bandaid 
-- Local
-- Dovetail
+## 🎯 Features
 
-# Protein Folding
-- Choufasman method
-- Genetic Algorithm
+### Alignment Algorithms (Implemented)
+- **Global Alignment (Needleman-Wunsch)** - Aligns entire sequences end-to-end
+- **Banded Alignment** - Optimized alignment within a diagonal band
 
-# Mutations
-- BLOSUM
-- PAM
+### Coming Soon
+- Local Alignment (Smith-Waterman)
+- Dovetail Alignment
+- Scoring Matrices (BLOSUM, PAM)
 
-## Features
-- Data processing and analysis
-- Interactive visualizations
-- Statistical analysis tools
+### Interactive Features
+- Input custom DNA or protein sequences
+- Adjust scoring parameters (match, mismatch, gap penalties)
+- Step-by-step matrix filling visualization
+- Traceback path highlighting
+- Alignment statistics (identity, coverage, gaps)
 
-## Installation
+## 🚀 Installation
+
 ```bash
 # Clone the repository
-git clone <repository-url>
-cd Project
+git clone https://github.com/D-Sritha-D/BioInformatics_Final_Project.git
+cd BioInformatics_Final_Project
+
+# Navigate to the alignment visualizer
+cd alignment-visualizer
 
 # Install dependencies
-pip install -r requirements.txt
+npm install
+
+# Start the development server
+npm run dev
 ```
 
-## Usage
-```bash
-# Run the main script
-python main.py
-```
+## 📁 Project Structure
 
-## Project Structure
 ```
 Project/
-├── data/           # Raw and processed data
-├── scripts/        # Analysis scripts
-├── visualizations/ # Output visualizations
-└── README.md       # Project documentation
+├── alignment-visualizer/     # React application
+│   ├── src/
+│   │   ├── algorithms/       # Alignment algorithm implementations
+│   │   │   ├── global/       # Needleman-Wunsch algorithm
+│   │   │   └── banded/       # Banded alignment algorithm
+│   │   ├── components/       # React UI components
+│   │   │   ├── SequenceInput/
+│   │   │   ├── AlignmentMatrix/
+│   │   │   ├── AlignmentResult/
+│   │   │   └── StepVisualizer/
+│   │   ├── types/            # TypeScript type definitions
+│   │   ├── App.tsx           # Main application component
+│   │   └── main.tsx          # Application entry point
+│   ├── package.json
+│   └── vite.config.ts
+└── README.md
 ```
 
-## Requirements
-- Python 3.x
-- Required libraries listed in requirements.txt
+## 🛠️ Tech Stack
 
-## Contributing
+- **React** - UI framework
+- **TypeScript** - Type-safe JavaScript
+- **Vite** - Build tool and dev server
+- **CSS3** - Styling with modern features
+
+## 📖 Algorithm Details
+
+### Global Alignment (Needleman-Wunsch)
+The Needleman-Wunsch algorithm finds the optimal global alignment between two sequences using dynamic programming.
+
+- **Time Complexity:** O(m × n)
+- **Space Complexity:** O(m × n)
+- **Use Case:** Comparing sequences of similar length
+
+### Banded Alignment
+An optimization that only considers cells within a diagonal band of width k.
+
+- **Time Complexity:** O(k × n)
+- **Space Complexity:** O(k × n)
+- **Use Case:** Similar sequences where gaps are limited
+
+## 🎓 Educational Purpose
+
+This tool is designed as a pedagogical resource for students learning bioinformatics, featuring:
+- Visual representation of dynamic programming matrices
+- Step-by-step algorithm execution
+- Interactive parameter adjustment
+- Real-time visualization of alignment results
+
+## 👥 Contributing
+
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-## License
+## 📄 License
+
 This project is licensed under the MIT License.
 
-## Contact
-For questions or feedback, please contact the project maintainer.
+## 📬 Contact
+
+For questions or feedback, please contact the project maintainers.

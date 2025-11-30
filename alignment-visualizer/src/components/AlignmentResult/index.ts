@@ -1,0 +1,1 @@
+export { AlignmentResult } from './AlignmentResult';
