@@ -87,24 +87,8 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigateToVisualizer, onNavigateT
         <div className="nav-container">
           <div className="nav-logo">Bio Insights</div>
           <div className="nav-links">
-            <a href="#" className="nav-link">Homepage</a>
-            <a href="#" className="nav-link">About</a>
-            <button className="nav-menu-button" aria-label="Menu">
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <line x1="3" y1="12" x2="21" y2="12" />
-                <line x1="3" y1="6" x2="21" y2="6" />
-                <line x1="3" y1="18" x2="21" y2="18" />
-              </svg>
-            </button>
+            <a href="#" className="nav-link" onClick={(e) => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>Homepage</a>
+            <a href="#about" className="nav-link">About</a>
           </div>
         </div>
       </nav>
@@ -146,6 +130,28 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigateToVisualizer, onNavigateT
           </div>
         </div>
       </section>
+
+      {/* About Section */}
+      <section id="about" className="about-section">
+        <div className="about-container">
+          <h2 className="about-title">About Bio Insights</h2>
+          <p className="about-description">
+            This website is designed to make learning bioinformatics algorithms easy and intuitive through interactive visualizations. 
+            Whether you're exploring sequence alignment, phylogenetic trees, or distance matrices, our tool provides step-by-step 
+            visual explanations to help you understand these fundamental concepts.
+          </p>
+          <p className="about-credits">
+            Developed by Masters students of Computer Science.
+          </p>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="footer">
+        <div className="footer-container">
+          <p className="copyright">&copy; {new Date().getFullYear()} Bio Insights. All rights reserved.</p>
+        </div>
+      </footer>
     </div>
   );
 };

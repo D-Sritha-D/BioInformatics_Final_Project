@@ -12,7 +12,7 @@
 .app-header {
   background: linear-gradient(135deg, var(--primary), var(--primary-light));
   color: white;
-  padding: 48px 24px;
+  padding: clamp(24px, 5vw, 48px) clamp(16px, 4vw, 24px);
   text-align: center;
   position: relative;
   overflow: hidden;
@@ -37,8 +37,8 @@
 }
 
 .header-content h1 {
-  margin: 0 0 12px 0;
-  font-size: 3rem;
+  margin: 0 0 clamp(8px, 2vw, 12px) 0;
+  font-size: clamp(1.5rem, 5vw, 3rem);
   font-weight: 800;
   color: #ffffff;
   text-shadow: 0 2px 10px rgba(0,0,0,0.2);
@@ -48,17 +48,17 @@
 .header-content .subtitle {
   margin: 0;
   opacity: 0.95;
-  font-size: 1.15rem;
+  font-size: clamp(0.9rem, 2vw, 1.15rem);
   color: rgba(255, 255, 255, 0.9);
   font-weight: 400;
 }
 
 .app-main {
   flex: 1;
-  max-width: 1400px;
+  max-width: min(1400px, 95vw);
   width: 100%;
   margin: 0 auto;
-  padding: 24px;
+  padding: clamp(12px, 3vw, 24px);
 }
 
 .input-panel {
@@ -77,12 +77,13 @@
 }
 
 .viz-toggle {
-  padding: 14px 28px;
+  padding: clamp(10px, 2vw, 14px) clamp(16px, 4vw, 28px);
   border: 2px solid var(--primary);
   background: var(--tile-bg);
   color: var(--primary);
   border-radius: 50px;
   font-weight: 600;
+  font-size: clamp(0.85rem, 2vw, 1rem);
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 2px 8px rgba(45, 27, 78, 0.1);
@@ -115,8 +116,8 @@
 /* Side-by-side layout for step-by-step visualization */
 .step-by-step-layout {
   display: grid;
-  grid-template-columns: 1fr 400px;
-  gap: 24px;
+  grid-template-columns: 1fr minmax(280px, 400px);
+  gap: clamp(16px, 3vw, 24px);
   align-items: start;
 }
 
@@ -154,15 +155,15 @@
 
 .info-section {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 24px;
-  margin-top: 32px;
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  gap: clamp(16px, 3vw, 24px);
+  margin-top: clamp(20px, 4vw, 32px);
 }
 
 .algorithm-info-card {
   background: var(--tile-bg);
-  border-radius: 16px;
-  padding: 28px;
+  border-radius: clamp(12px, 2vw, 16px);
+  padding: clamp(16px, 3vw, 28px);
   box-shadow: 0 4px 20px rgba(45, 27, 78, 0.08);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   border: 1px solid rgba(45, 27, 78, 0.05);
@@ -323,7 +324,7 @@
   background: var(--primary-dark);
   color: white;
   text-align: center;
-  padding: 20px;
+  padding: clamp(12px, 3vw, 20px);
   margin-top: auto;
 }
 

@@ -1,16 +1,17 @@
 .result-container {
   background: var(--tile-bg);
-  border-radius: 20px;
-  padding: 28px;
+  border-radius: clamp(12px, 3vw, 20px);
+  padding: clamp(16px, 3vw, 28px);
   box-shadow: 0 8px 32px rgba(45, 27, 78, 0.1);
   border: 1px solid rgba(45, 27, 78, 0.05);
 }
 
 .result-container h2 {
   margin-top: 0;
-  margin-bottom: 24px;
+  margin-bottom: clamp(16px, 3vw, 24px);
   color: var(--text-primary);
   font-weight: 700;
+  font-size: clamp(1.1rem, 3vw, 1.5rem);
 }
 
 .result-header {
@@ -45,7 +46,7 @@
 }
 
 .score-value {
-  font-size: 32px;
+  font-size: clamp(1.5rem, 4vw, 2rem);
   font-weight: 800;
   color: var(--success);
   text-shadow: 0 2px 8px rgba(46, 204, 113, 0.2);
@@ -53,9 +54,9 @@
 
 .alignment-display {
   background: linear-gradient(135deg, var(--bg-secondary), rgba(45, 27, 78, 0.03));
-  border-radius: 16px;
-  padding: 24px;
-  margin-bottom: 28px;
+  border-radius: clamp(10px, 2vw, 16px);
+  padding: clamp(12px, 3vw, 24px);
+  margin-bottom: clamp(16px, 4vw, 28px);
   overflow-x: auto;
   border: 1px solid rgba(45, 27, 78, 0.05);
 }
@@ -82,14 +83,15 @@
 }
 
 .seq-char {
-  width: 28px;
-  height: 28px;
+  width: clamp(20px, 4vw, 28px);
+  height: clamp(20px, 4vw, 28px);
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 4px;
   margin: 1px;
   font-weight: 600;
+  font-size: clamp(12px, 2vw, 16px);
   transition: transform 0.2s;
 }
 
@@ -126,9 +128,9 @@
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 16px;
-  margin-bottom: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(min(100px, 100%), 1fr));
+  gap: clamp(8px, 2vw, 16px);
+  margin-bottom: clamp(12px, 3vw, 20px);
 }
 
 @media (max-width: 768px) {
@@ -153,9 +155,9 @@
 
 .stat-value {
   display: block;
-  font-size: 28px;
+  font-size: clamp(1.25rem, 4vw, 1.75rem);
   font-weight: 800;
-  margin-bottom: 6px;
+  margin-bottom: clamp(4px, 1vw, 6px);
 }
 
 .stat-value.matches {

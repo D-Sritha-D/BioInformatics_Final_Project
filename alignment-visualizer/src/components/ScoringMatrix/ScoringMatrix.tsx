@@ -117,7 +117,6 @@ const ScoringMatrix: React.FC<ScoringMatrixProps> = ({ onNavigateToHomepage }) =
               <h5>Key Points about PAM Data Source:</h5>
               <ul>
                 <li><strong>Global alignments</strong> - entire sequences are aligned from start to end, not just conserved regions</li>
-                <li><strong>Small amount of data</strong> - the 85% identity requirement severely limits usable sequences</li>
                 <li><strong>Phylogenetic approach</strong> - mutations are inferred from evolutionary trees of related sequences</li>
                 <li>Mutations highlighted in <span className="mutation-inline">red</span> represent accepted point mutations that did not destroy protein function</li>
               </ul>
