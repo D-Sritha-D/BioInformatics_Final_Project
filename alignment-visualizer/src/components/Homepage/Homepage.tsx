@@ -12,9 +12,11 @@ interface HomepageProps {
   onNavigateToVisualizer?: () => void;
   onNavigateToScoringMatrix?: () => void;
   onNavigateToSuffixTree?: () => void;
+  onNavigateToPhylogeny?: () => void;
+  onNavigateToDistanceMatrix?: () => void;
 }
 
-const Homepage: React.FC<HomepageProps> = ({ onNavigateToVisualizer, onNavigateToScoringMatrix, onNavigateToSuffixTree }) => {
+const Homepage: React.FC<HomepageProps> = ({ onNavigateToVisualizer, onNavigateToScoringMatrix, onNavigateToSuffixTree, onNavigateToPhylogeny, onNavigateToDistanceMatrix }) => {
   const concepts: ConceptCard[] = [
     {
     id: 'global-alignment',
@@ -38,7 +40,19 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigateToVisualizer, onNavigateT
     id: 'suffix-tree',
     title: 'Suffix Tree and Suffix Array',
     description: 'Efficient data structures for fast pattern matching, substring searches, and genome indexing applications.',
+    icon: '🌲'
+    },
+    {
+    id: 'phylogeny-tree',
+    title: 'Phylogenetic Trees',
+    description: 'Visualize evolutionary relationships between species using tree structures built from sequence data.',
     icon: '🌳'
+    },
+    {
+    id: 'distance-matrix',
+    title: 'Distance Matrix & UPGMA',
+    description: 'Learn hierarchical clustering with UPGMA algorithm to build phylogenetic trees from distance matrices.',
+    icon: '📐'
     }
   ];
 
@@ -56,7 +70,14 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigateToVisualizer, onNavigateT
     if (conceptId === 'suffix-tree' && onNavigateToSuffixTree) {
       onNavigateToSuffixTree();
     }
-    // Implement navigation to concept detail page for others
+    // Navigate to phylogeny tree page
+    if (conceptId === 'phylogeny-tree' && onNavigateToPhylogeny) {
+      onNavigateToPhylogeny();
+    }
+    // Navigate to distance matrix page
+    if (conceptId === 'distance-matrix' && onNavigateToDistanceMatrix) {
+      onNavigateToDistanceMatrix();
+    }
   };
 
   return (
