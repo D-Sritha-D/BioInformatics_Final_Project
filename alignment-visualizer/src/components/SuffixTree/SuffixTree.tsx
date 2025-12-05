@@ -21,11 +21,23 @@ interface BuildStep {
   treeSnapshot: TreeNode;
 }
 
+interface SuffixArrayStep {
+  stepNumber: number;
+  suffixes: { suffix: string; index: number }[];
+  description: string;
+  sortedIndices: number[];
+  sortedSuffixes?: { suffix: string; index: number }[];
+}
+
+type Mode = 'tree' | 'array';
+
 const VALID_CHARS = new Set(['A', 'T', 'G', 'C']);
 const MAX_LENGTH = 10;
 
 const SuffixTree: React.FC<SuffixTreeProps> = ({ onNavigateToHomepage }) => {
+  const [mode, setMode] = useState<Mode>('tree');
   const [currentStep, setCurrentStep] = useState(0);
+  const [arrayCurrentStep, setArrayCurrentStep] = useState(0);
   const [showFinalTree, setShowFinalTree] = useState(true);
   const [inputSequence, setInputSequence] = useState('TGAGTGCGA');
   const [inputError, setInputError] = useState<string | null>(null);
@@ -63,8 +75,18 @@ const SuffixTree: React.FC<SuffixTreeProps> = ({ onNavigateToHomepage }) => {
       setCurrentStep(0);
     }
   }, [inputSequence, inputError]);
+
+  // Handle mode change
+  const handleModeChange = useCallback((newMode: Mode) => {
+    setMode(newMode);
+    setCurrentStep(0);
+    setArrayCurrentStep(0);
+    setShowFinalTree(true);
+    // Reset input to force re-render with fresh state
+    setSequence(inputSequence + '$');
+  }, [inputSequence]);
   
-  // Generate all suffixes
+  // Generate all suffixes (for tree: last to first, for array: first to last for display)
   const suffixes = useMemo(() => {
     const result: { suffix: string; index: number }[] = [];
     for (let i = sequence.length-1; i >= 0; i--) {
@@ -75,6 +97,56 @@ const SuffixTree: React.FC<SuffixTreeProps> = ({ onNavigateToHomepage }) => {
     }
     return result;
   }, [sequence]);
+
+  // Generate suffixes for array display (in original order)
+  const suffixesForArray = useMemo(() => {
+    const result: { suffix: string; index: number }[] = [];
+    for (let i = 0; i < sequence.length; i++) {
+      result.push({
+        suffix: sequence.substring(i),
+        index: i
+      });
+    }
+    return result;
+  }, [sequence]);
+
+  // Build suffix array step by step (sorting process)
+  const suffixArraySteps = useMemo((): SuffixArrayStep[] => {
+    const steps: SuffixArrayStep[] = [];
+    const allSuffixes = suffixesForArray.map(s => ({ ...s }));
+    
+    // Step 1: List all suffixes (unsorted)
+    steps.push({
+      stepNumber: 1,
+      suffixes: [...allSuffixes],
+      description: 'List all suffixes with their starting positions',
+      sortedIndices: allSuffixes.map(s => s.index),
+      sortedSuffixes: undefined
+    });
+
+    // Sort suffixes lexicographically
+    const sorted = [...allSuffixes].sort((a, b) => a.suffix.localeCompare(b.suffix));
+    
+    // Create step-by-step showing the sorting (one suffix at a time)
+    for (let i = 0; i < sorted.length; i++) {
+      steps.push({
+        stepNumber: i + 2,
+        suffixes: allSuffixes,
+        description: i === sorted.length - 1 
+          ? 'Sorting complete! All suffixes are in lexicographic order' 
+          : `Placing suffix "${sorted[i].suffix}" at position ${i + 1}`,
+        sortedIndices: sorted.slice(0, i + 1).map(s => s.index),
+        sortedSuffixes: sorted.slice(0, i + 1)
+      });
+    }
+
+    return steps;
+  }, [suffixesForArray]);
+
+  // Final suffix array - now used by the sorted suffixes display
+  const _finalSuffixArray = useMemo(() => {
+    return [...suffixesForArray].sort((a, b) => a.suffix.localeCompare(b.suffix)).map(s => s.index);
+  }, [suffixesForArray]);
 
   // Build suffix tree step by step
   const buildSteps = useMemo((): BuildStep[] => {
@@ -232,8 +304,8 @@ const SuffixTree: React.FC<SuffixTreeProps> = ({ onNavigateToHomepage }) => {
     <div className="suffix-tree-page">
       <header className="page-header">
         <div className="header-content">
-          <h1>Suffix Tree Search Method</h1>
-          <p className="subtitle">Understanding suffix tree construction for efficient string searching</p>
+          <h1>Suffix Tree and Suffix Array</h1>
+          <p className="subtitle">Understanding suffix data structures for efficient string searching</p>
           <button onClick={onNavigateToHomepage} className="back-button">
             ← Back to Homepage
           </button>
@@ -241,25 +313,79 @@ const SuffixTree: React.FC<SuffixTreeProps> = ({ onNavigateToHomepage }) => {
       </header>
 
       <main className="page-main">
+        {/* Mode Selection */}
+        <section className="mode-selection-section">
+          <h2>Select Data Structure</h2>
+          <div className="mode-selector">
+            <label className={`mode-option ${mode === 'tree' ? 'active' : ''}`}>
+              <input
+                type="radio"
+                name="mode"
+                value="tree"
+                checked={mode === 'tree'}
+                onChange={() => handleModeChange('tree')}
+              />
+              <span className="mode-label">
+                <span className="mode-name">Suffix Tree</span>
+              </span>
+            </label>
+            <label className={`mode-option ${mode === 'array' ? 'active' : ''}`}>
+              <input
+                type="radio"
+                name="mode"
+                value="array"
+                checked={mode === 'array'}
+                onChange={() => handleModeChange('array')}
+              />
+              <span className="mode-label">
+                <span className="mode-name">Suffix Array</span>
+              </span>
+            </label>
+          </div>
+        </section>
+
         {/* Introduction Section */}
         <section className="intro-section">
           <div className="intro-content">
-            <h2>What is a Suffix Tree?</h2>
-            <p>
-              A <strong>suffix tree</strong> is a compressed trie (prefix tree) containing all suffixes of a given string. 
-              It is a powerful data structure used for fast pattern matching, finding repeated substrings, and many 
-              other string operations in O(m) time, where m is the pattern length.
-            </p>
-            <div className="key-properties">
-              <h3>Key Properties:</h3>
-              <ul>
-                <li>Every suffix of the string is represented as a path from root to a leaf</li>
-                <li>Each edge is labeled with a non-empty substring</li>
-                <li>No two edges from the same node can have labels starting with the same character</li>
-                <li>Each leaf node represents a suffix and stores its starting position</li>
-                <li>The string is typically terminated with a unique character (like $) to ensure all suffixes end at leaves</li>
-              </ul>
-            </div>
+            {mode === 'tree' ? (
+              <>
+                <h2>What is a Suffix Tree?</h2>
+                <p>
+                  A <strong>suffix tree</strong> is a compressed trie (prefix tree) containing all suffixes of a given string. 
+                  It is a powerful data structure used for fast pattern matching, finding repeated substrings, and many 
+                  other string operations in O(m) time, where m is the pattern length.
+                </p>
+                <div className="key-properties">
+                  <h3>Key Properties:</h3>
+                  <ul>
+                    <li>Every suffix of the string is represented as a path from root to a leaf</li>
+                    <li>Each edge is labeled with a non-empty substring</li>
+                    <li>No two edges from the same node can have labels starting with the same character</li>
+                    <li>Each leaf node represents a suffix and stores its starting position</li>
+                    <li>The string is typically terminated with a unique character (like $) to ensure all suffixes end at leaves</li>
+                  </ul>
+                </div>
+              </>
+            ) : (
+              <>
+                <h2>What is a Suffix Array?</h2>
+                <p>
+                  A <strong>suffix array</strong> is a sorted array of all suffixes of a string. It provides a space-efficient 
+                  alternative to suffix trees while still enabling fast pattern matching and other string operations. 
+                  The suffix array stores only the starting indices of suffixes in lexicographically sorted order.
+                </p>
+                <div className="key-properties">
+                  <h3>Key Properties:</h3>
+                  <ul>
+                    <li>Contains starting indices of all suffixes sorted lexicographically</li>
+                    <li>Space efficient: O(n) integers vs O(n) nodes in suffix tree</li>
+                    <li>Can be constructed in O(n) time with advanced algorithms</li>
+                    <li>Pattern search in O(m log n) time using binary search</li>
+                    <li>Often used with LCP (Longest Common Prefix) array for enhanced operations</li>
+                  </ul>
+                </div>
+              </>
+            )}
           </div>
         </section>
 
@@ -281,7 +407,7 @@ const SuffixTree: React.FC<SuffixTreeProps> = ({ onNavigateToHomepage }) => {
                 onClick={handleApplySequence}
                 disabled={!!inputError || inputSequence.length === 0}
               >
-                Build Tree
+                Build {mode === 'tree' ? 'Tree' : 'Array'}
               </button>
             </div>
             {inputError && <p className="input-error">{inputError}</p>}
@@ -293,7 +419,7 @@ const SuffixTree: React.FC<SuffixTreeProps> = ({ onNavigateToHomepage }) => {
 
         {/* Example Sequence Section */}
         <section className="example-section">
-          <h2>Building Suffix Tree for: {sequence}</h2>
+          <h2>Building {mode === 'tree' ? 'Suffix Tree' : 'Suffix Array'} for: {sequence}</h2>
           <div className="sequence-display">
             <h3>Input Sequence:</h3>
             <div className="sequence-box">
@@ -305,17 +431,17 @@ const SuffixTree: React.FC<SuffixTreeProps> = ({ onNavigateToHomepage }) => {
               ))}
             </div>
             <p className="sequence-note">
-              The $ symbol is a termination character that ensures every suffix ends at a unique leaf node.
+              The $ symbol is a termination character that ensures every suffix ends at a unique {mode === 'tree' ? 'leaf node' : 'position'}.
             </p>
           </div>
 
           <div className="suffixes-list">
             <h3>All Suffixes:</h3>
             <div className="suffixes-grid">
-              {suffixes.map(({ suffix, index }) => (
+              {(mode === 'tree' ? suffixes : suffixesForArray).map(({ suffix, index }) => (
                 <div 
                   key={index} 
-                  className={`suffix-item ${currentStep === index ? 'current' : ''} ${currentStep > index ? 'completed' : ''}`}
+                  className={`suffix-item`}
                 >
                   <span className="suffix-index-label">Position {index}:</span>
                   <span className="suffix-text">{suffix}</span>
@@ -332,7 +458,7 @@ const SuffixTree: React.FC<SuffixTreeProps> = ({ onNavigateToHomepage }) => {
               className={`toggle-btn ${showFinalTree ? 'active' : ''}`}
               onClick={() => setShowFinalTree(true)}
             >
-              Final Tree
+              {mode === 'tree' ? 'Final Tree' : 'Final Array'}
             </button>
             <button 
               className={`toggle-btn ${!showFinalTree ? 'active' : ''}`}
@@ -343,8 +469,8 @@ const SuffixTree: React.FC<SuffixTreeProps> = ({ onNavigateToHomepage }) => {
           </div>
         </section>
 
-        {/* Final Tree View */}
-        {showFinalTree && finalTree && (
+        {/* Suffix Tree: Final Tree View */}
+        {mode === 'tree' && showFinalTree && finalTree && (
           <section className="final-tree-section">
             <h2>Complete Suffix Tree for "{sequence}"</h2>
             <div className="tree-visualization">
@@ -387,8 +513,88 @@ const SuffixTree: React.FC<SuffixTreeProps> = ({ onNavigateToHomepage }) => {
           </section>
         )}
 
-        {/* Step-by-Step Construction */}
-        {!showFinalTree && (
+        {/* Suffix Array: Final Array View */}
+        {mode === 'array' && showFinalTree && (
+          <section className="final-tree-section">
+            <h2>Complete Suffix Array for "{sequence}"</h2>
+            <div className="suffix-array-result">
+              <div className="array-visualization">
+                <h4>Suffix Array (SA):</h4>
+                <div className="array-container">
+                  <div className="array-row header-row">
+                    <span className="array-label">Index:</span>
+                    {suffixArraySteps[suffixArraySteps.length - 1]?.sortedSuffixes?.map((_, idx) => (
+                      <span key={idx} className="array-cell header">{idx}</span>
+                    ))}
+                  </div>
+                  <div className="array-row">
+                    <span className="array-label">SA[i]:</span>
+                    {suffixArraySteps[suffixArraySteps.length - 1]?.sortedSuffixes?.map((s, idx) => (
+                      <span key={idx} className="array-cell value">{s.index}</span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+              
+              <div className="sorted-suffixes-table">
+                <h4>Sorted Suffixes:</h4>
+                <table className="suffix-table">
+                  <thead>
+                    <tr>
+                      <th>SA Index</th>
+                      <th>Original Position</th>
+                      <th>Suffix</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {suffixArraySteps[suffixArraySteps.length - 1]?.sortedSuffixes?.map((s, idx) => (
+                      <tr key={idx}>
+                        <td>{idx}</td>
+                        <td>{s.index}</td>
+                        <td className="suffix-text-cell">{s.suffix}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div className="tree-legend">
+              <h4>How to Read the Suffix Array:</h4>
+              <ul>
+                <li><strong>SA[i]</strong>: The starting position in the original string of the i-th lexicographically smallest suffix</li>
+                <li><strong>Index</strong>: Position in the sorted array (0, 1, 2, ...)</li>
+                <li><strong>Original Position</strong>: Where this suffix starts in the original string</li>
+                <li>The suffixes are sorted in lexicographic (alphabetical) order</li>
+              </ul>
+            </div>
+
+            <div className="search-example">
+              <h3>Example: Binary Search for a Pattern</h3>
+              <div className="search-steps">
+                <div className="search-step">
+                  <span className="step-num">1</span>
+                  <span className="step-text">Given a pattern P, use binary search on the suffix array</span>
+                </div>
+                <div className="search-step">
+                  <span className="step-num">2</span>
+                  <span className="step-text">Compare P with suffix at SA[mid] lexicographically</span>
+                </div>
+                <div className="search-step">
+                  <span className="step-num">3</span>
+                  <span className="step-text">If P &lt; suffix, search left half; if P &gt; suffix, search right half</span>
+                </div>
+                <div className="search-step">
+                  <span className="step-num">4</span>
+                  <span className="step-text">If match found, SA[mid] gives the starting position of the pattern</span>
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* Suffix Tree: Step-by-Step Construction */}
+        {mode === 'tree' && !showFinalTree && (
           <section className="step-section">
             <h2>Step-by-Step Construction</h2>
             
@@ -472,64 +678,205 @@ const SuffixTree: React.FC<SuffixTreeProps> = ({ onNavigateToHomepage }) => {
           </section>
         )}
 
+        {/* Suffix Array: Step-by-Step Construction */}
+        {mode === 'array' && !showFinalTree && (
+          <section className="step-section">
+            <h2>Step-by-Step Construction (Sorting)</h2>
+            
+            {/* Step Progress */}
+            <div className="step-progress">
+              {suffixArraySteps.map((_step, index) => (
+                <div 
+                  key={index}
+                  className={`progress-step ${index === arrayCurrentStep ? 'active' : ''} ${index < arrayCurrentStep ? 'completed' : ''}`}
+                  onClick={() => setArrayCurrentStep(index)}
+                >
+                  <div className="step-number">{index + 1}</div>
+                </div>
+              ))}
+            </div>
+
+            {/* Current Step Info */}
+            {suffixArraySteps[arrayCurrentStep] && (
+              <div className="step-content">
+                <div className="step-title-row">
+                  <h3>Step {suffixArraySteps[arrayCurrentStep].stepNumber}: {suffixArraySteps[arrayCurrentStep].description}</h3>
+                </div>
+
+                <div className="suffix-array-step-content">
+                  {arrayCurrentStep === 0 ? (
+                    <div className="unsorted-suffixes">
+                      <h4>All Suffixes (unsorted):</h4>
+                      <div className="suffixes-step-grid">
+                        {suffixArraySteps[arrayCurrentStep].suffixes.map((s, idx) => (
+                          <div key={idx} className="suffix-step-item">
+                            <span className="suffix-position-label">Pos {s.index}:</span>
+                            <span className="suffix-text-value">{s.suffix}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="sorting-progress">
+                      <h4>Sorted Suffixes ({arrayCurrentStep} of {suffixArraySteps.length - 1} sorted):</h4>
+                      <div className="sorting-visualization">
+                        {suffixArraySteps[arrayCurrentStep].sortedSuffixes?.map((s, idx) => (
+                          <div 
+                            key={idx} 
+                            className={`sorted-suffix-item ${idx === arrayCurrentStep - 1 ? 'just-sorted' : ''} ${idx < arrayCurrentStep - 1 ? 'already-sorted' : ''}`}
+                          >
+                            <span className="sort-rank">{idx + 1}</span>
+                            <span className="suffix-position-label">Pos {s.index}:</span>
+                            <span className="suffix-text-value">{s.suffix}</span>
+                          </div>
+                        ))}
+                      </div>
+                      {arrayCurrentStep < suffixArraySteps.length - 1 && (
+                        <p className="sorting-note">
+                          Comparing suffixes lexicographically to find position {arrayCurrentStep + 1}...
+                        </p>
+                      )}
+                      {arrayCurrentStep === suffixArraySteps.length - 1 && (
+                        <p className="sorting-complete">
+                          ✓ Sorting complete! The suffix array is: [{suffixArraySteps[arrayCurrentStep].sortedSuffixes?.map(s => s.index).join(', ')}]
+                        </p>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Step Navigation */}
+            <div className="step-navigation">
+              <button 
+                className="nav-button prev"
+                onClick={() => setArrayCurrentStep(Math.max(0, arrayCurrentStep - 1))}
+                disabled={arrayCurrentStep === 0}
+              >
+                ← Previous
+              </button>
+              <span className="step-indicator">{arrayCurrentStep + 1} / {suffixArraySteps.length}</span>
+              <button 
+                className="nav-button next"
+                onClick={() => setArrayCurrentStep(Math.min(suffixArraySteps.length - 1, arrayCurrentStep + 1))}
+                disabled={arrayCurrentStep === suffixArraySteps.length - 1}
+              >
+                Next →
+              </button>
+            </div>
+          </section>
+        )}
+
         {/* Applications Section */}
         <section className="applications-section">
-          <h2>Applications of Suffix Trees</h2>
-          <div className="applications-grid">
-            <div className="application-card">
-              <h3>Pattern Matching</h3>
-              <p>Find all occurrences of a pattern in O(m) time, where m is the pattern length.</p>
+          <h2>Applications of {mode === 'tree' ? 'Suffix Trees' : 'Suffix Arrays'}</h2>
+          {mode === 'tree' ? (
+            <div className="applications-grid">
+              <div className="application-card">
+                <h3>Pattern Matching</h3>
+                <p>Find all occurrences of a pattern in O(m) time, where m is the pattern length.</p>
+              </div>
+              <div className="application-card">
+                <h3>Longest Repeated Substring</h3>
+                <p>Find the longest substring that appears more than once by finding the deepest internal node.</p>
+              </div>
+              <div className="application-card">
+                <h3>Longest Common Substring</h3>
+                <p>Find the longest common substring between two strings using a generalized suffix tree.</p>
+              </div>
+              <div className="application-card">
+                <h3>Genome Analysis</h3>
+                <p>Essential for DNA sequence analysis, repeat detection, and sequence alignment.</p>
+              </div>
             </div>
-            <div className="application-card">
-              <h3>Longest Repeated Substring</h3>
-              <p>Find the longest substring that appears more than once by finding the deepest internal node.</p>
+          ) : (
+            <div className="applications-grid">
+              <div className="application-card">
+                <h3>Pattern Matching</h3>
+                <p>Binary search for patterns in O(m log n) time. Can be improved to O(m + log n) with LCP array.</p>
+              </div>
+              <div className="application-card">
+                <h3>Burrows-Wheeler Transform</h3>
+                <p>Used in BWT for data compression (bzip2) and FM-index for efficient string matching.</p>
+              </div>
+              <div className="application-card">
+                <h3>Read Alignment</h3>
+                <p>Foundation for tools like BWA and Bowtie for aligning sequencing reads to reference genomes.</p>
+              </div>
+              <div className="application-card">
+                <h3>Space Efficiency</h3>
+                <p>Requires only n integers of space vs O(n) pointers in suffix trees - much more memory efficient.</p>
+              </div>
             </div>
-            <div className="application-card">
-              <h3>Longest Common Substring</h3>
-              <p>Find the longest common substring between two strings using a generalized suffix tree.</p>
-            </div>
-            <div className="application-card">
-              <h3>Genome Analysis</h3>
-              <p>Essential for DNA sequence analysis, repeat detection, and sequence alignment.</p>
-            </div>
-          </div>
+          )}
         </section>
 
         {/* Complexity Section */}
         <section className="complexity-section">
           <h2>Time and Space Complexity</h2>
-          <div className="complexity-table">
-            <table>
-              <thead>
-                <tr>
-                  <th>Operation</th>
-                  <th>Naive Construction</th>
-                  <th>Ukkonen's Algorithm</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Construction Time</td>
-                  <td>O(n²)</td>
-                  <td>O(n)</td>
-                </tr>
-                <tr>
-                  <td>Space</td>
-                  <td>O(n²)</td>
-                  <td>O(n)</td>
-                </tr>
-                <tr>
-                  <td>Pattern Search</td>
-                  <td colSpan={2}>O(m) where m = pattern length</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+          {mode === 'tree' ? (
+            <div className="complexity-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Operation</th>
+                    <th>Naive Construction</th>
+                    <th>Ukkonen's Algorithm</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Construction Time</td>
+                    <td>O(n²)</td>
+                    <td>O(n)</td>
+                  </tr>
+                  <tr>
+                    <td>Space</td>
+                    <td>O(n²)</td>
+                    <td>O(n)</td>
+                  </tr>
+                  <tr>
+                    <td>Pattern Search</td>
+                    <td colSpan={2}>O(m) where m = pattern length</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <div className="complexity-table">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Operation</th>
+                    <th>Naive (Sorting)</th>
+                    <th>DC3/SA-IS Algorithm</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Construction Time</td>
+                    <td>O(n² log n)</td>
+                    <td>O(n)</td>
+                  </tr>
+                  <tr>
+                    <td>Space</td>
+                    <td>O(n)</td>
+                    <td>O(n)</td>
+                  </tr>
+                  <tr>
+                    <td>Pattern Search</td>
+                    <td colSpan={2}>O(m log n) or O(m + log n) with LCP</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          )}
         </section>
       </main>
 
       <footer className="page-footer">
-        <p>Suffix Tree Search Method - Educational Visualization</p>
+        <p>{mode === 'tree' ? 'Suffix Tree' : 'Suffix Array'} - Educational Visualization</p>
       </footer>
     </div>
   );

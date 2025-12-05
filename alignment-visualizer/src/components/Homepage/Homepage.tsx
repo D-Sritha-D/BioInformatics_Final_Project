@@ -36,8 +36,8 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigateToVisualizer, onNavigateT
     },
     {
     id: 'suffix-tree',
-    title: 'Suffix Tree Search Method',
-    description: 'Efficient data structure for fast pattern matching, substring searches, and genome indexing applications.',
+    title: 'Suffix Tree and Suffix Array',
+    description: 'Efficient data structures for fast pattern matching, substring searches, and genome indexing applications.',
     icon: '🌳'
     }
   ];
