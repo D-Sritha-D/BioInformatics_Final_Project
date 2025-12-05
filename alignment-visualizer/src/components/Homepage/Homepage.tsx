@@ -11,9 +11,10 @@ interface ConceptCard {
 interface HomepageProps {
   onNavigateToVisualizer?: () => void;
   onNavigateToScoringMatrix?: () => void;
+  onNavigateToSuffixTree?: () => void;
 }
 
-const Homepage: React.FC<HomepageProps> = ({ onNavigateToVisualizer, onNavigateToScoringMatrix }) => {
+const Homepage: React.FC<HomepageProps> = ({ onNavigateToVisualizer, onNavigateToScoringMatrix, onNavigateToSuffixTree }) => {
   const concepts: ConceptCard[] = [
     {
     id: 'global-alignment',
@@ -32,6 +33,12 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigateToVisualizer, onNavigateT
     title: 'Scoring Matrix Computation',
     description: 'Evaluate sequence similarity using substitution matrices like PAM and BLOSUM to guide accurate alignments.',
     icon: '📊'
+    },
+    {
+    id: 'suffix-tree',
+    title: 'Suffix Tree Search Method',
+    description: 'Efficient data structure for fast pattern matching, substring searches, and genome indexing applications.',
+    icon: '🌳'
     }
   ];
 
@@ -44,6 +51,10 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigateToVisualizer, onNavigateT
     // Navigate to scoring matrix page
     if (conceptId === 'scoring-matrix' && onNavigateToScoringMatrix) {
       onNavigateToScoringMatrix();
+    }
+    // Navigate to suffix tree page
+    if (conceptId === 'suffix-tree' && onNavigateToSuffixTree) {
+      onNavigateToSuffixTree();
     }
     // Implement navigation to concept detail page for others
   };
