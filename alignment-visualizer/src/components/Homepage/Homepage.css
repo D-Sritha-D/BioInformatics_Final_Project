@@ -22,12 +22,12 @@
   background: rgba(26, 31, 58, 0.95);
   backdrop-filter: blur(10px);
   z-index: 1000;
-  padding: 1rem 2rem;
+  padding: clamp(0.75rem, 2vw, 1rem) clamp(1rem, 3vw, 2rem);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .nav-container {
-  max-width: 1200px;
+  max-width: min(1200px, 95vw);
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
@@ -35,7 +35,7 @@
 }
 
 .nav-logo {
-  font-size: 1.5rem;
+  font-size: clamp(1.1rem, 3vw, 1.5rem);
   font-weight: 700;
   color: #ffffff;
 }
@@ -43,7 +43,7 @@
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 2rem;
+  gap: clamp(1rem, 3vw, 2rem);
 }
 
 .nav-link {
@@ -118,7 +118,7 @@
   position: relative;
   z-index: 1;
   text-align: center;
-  max-width: 900px;
+  max-width: min(900px, 90vw);
 }
 
 .hero-title {
@@ -141,14 +141,14 @@
 /* Concepts Section */
 .concepts-section {
   background: linear-gradient(to bottom, #f0f2f5, #e8eaed);
-  padding: 6rem 2rem;
+  padding: clamp(3rem, 8vw, 6rem) clamp(1rem, 3vw, 2rem);
   min-height: 100vh;
   display: flex;
   align-items: center;
 }
 
 .concepts-container {
-  max-width: 1200px;
+  max-width: min(1200px, 95vw);
   margin: 0 auto;
   width: 100%;
 }
@@ -171,15 +171,15 @@
 
 .concepts-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-  margin-top: 3rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+  gap: clamp(1rem, 3vw, 2rem);
+  margin-top: clamp(1.5rem, 4vw, 3rem);
 }
 
 .concept-card {
   background: #ffffff;
-  border-radius: 20px;
-  padding: 3rem 2rem;
+  border-radius: clamp(12px, 3vw, 20px);
+  padding: clamp(1.5rem, 4vw, 3rem) clamp(1rem, 3vw, 2rem);
   text-align: center;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   transition: all 0.3s ease;
@@ -194,19 +194,19 @@
 }
 
 .concept-icon {
-  font-size: 4rem;
-  margin-bottom: 1.5rem;
-  height: 100px;
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  margin-bottom: clamp(1rem, 2vw, 1.5rem);
+  height: clamp(60px, 15vw, 100px);
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .concept-title {
-  font-size: 1.5rem;
+  font-size: clamp(1.1rem, 3vw, 1.5rem);
   font-weight: 600;
   color: #1a1f3a;
-  margin-bottom: 1rem;
+  margin-bottom: clamp(0.5rem, 2vw, 1rem);
 }
 
 .concept-description {
@@ -218,12 +218,12 @@
 }
 
 .learn-more-button {
-  padding: 0.875rem 2.5rem;
+  padding: clamp(0.625rem, 2vw, 0.875rem) clamp(1.5rem, 4vw, 2.5rem);
   background: transparent;
   border: 2px solid #4a5fd9;
   border-radius: 50px;
   color: #4a5fd9;
-  font-size: 1rem;
+  font-size: clamp(0.85rem, 2vw, 1rem);
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -239,20 +239,8 @@
   transform: scale(0.98);
 }
 
-/* Responsive Design */
+/* Responsive Design - Tablets */
 @media (max-width: 768px) {
-  .navbar {
-    padding: 1rem;
-  }
-
-  .nav-logo {
-    font-size: 1.25rem;
-  }
-
-  .nav-links {
-    gap: 1rem;
-  }
-
   .nav-link {
     font-size: 0.9rem;
   }
@@ -262,12 +250,61 @@
     padding-top: 70px;
   }
 
-  .concepts-grid {
-    grid-template-columns: 1fr;
-  }
-
   .concepts-section {
     padding: 4rem 1rem;
+  }
+  
+  .concept-description {
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+  }
+}
+
+/* Small tablets and large phones */
+@media (max-width: 600px) {
+  .nav-links {
+    gap: 0.75rem;
+  }
+  
+  .nav-link {
+    font-size: 0.8rem;
+  }
+  
+  .hero-section::before,
+  .hero-section::after {
+    display: none;
+  }
+  
+  .hero-subtitle {
+    margin-bottom: 2rem;
+  }
+  
+  .concepts-subtitle {
+    margin-bottom: 2rem;
+  }
+}
+
+/* Mobile phones */
+@media (max-width: 480px) {
+  .navbar {
+    padding: 0.5rem 0.75rem;
+  }
+  
+  .nav-links {
+    display: none;
+  }
+  
+  .hero-section {
+    padding: 1rem;
+    padding-top: 60px;
+  }
+  
+  .concept-card {
+    padding: 1.25rem 1rem;
+  }
+  
+  .concepts-section {
+    padding: 2rem 0.75rem;
   }
 }
 

@@ -7,7 +7,7 @@
 .dm-header {
   background: linear-gradient(135deg, var(--primary), var(--primary-light));
   color: white;
-  padding: 48px 24px;
+  padding: clamp(24px, 5vw, 48px) clamp(16px, 4vw, 24px);
   text-align: center;
   position: relative;
   overflow: hidden;
@@ -33,7 +33,7 @@
 
 .dm-header h1 {
   margin: 0 0 16px 0;
-  font-size: 2.5rem;
+  font-size: clamp(1.5rem, 5vw, 2.5rem);
   font-weight: 800;
   text-shadow: 0 2px 10px rgba(0,0,0,0.2);
 }
@@ -57,9 +57,9 @@
 
 /* Main Content */
 .dm-main {
-  max-width: 1200px;
+  max-width: min(1200px, 95vw);
   margin: 0 auto;
-  padding: 32px 24px;
+  padding: clamp(16px, 4vw, 32px) clamp(12px, 3vw, 24px);
 }
 
 /* Definition Section */
@@ -69,12 +69,12 @@
 
 .definition-card {
   background: var(--tile-bg);
-  border-radius: 20px;
-  padding: 40px;
+  border-radius: clamp(12px, 3vw, 20px);
+  padding: clamp(20px, 4vw, 40px);
   box-shadow: 0 8px 32px rgba(45, 27, 78, 0.1);
   display: grid;
-  grid-template-columns: 200px 1fr;
-  gap: 40px;
+  grid-template-columns: minmax(120px, 200px) 1fr;
+  gap: clamp(20px, 4vw, 40px);
   align-items: center;
 }
 
@@ -97,14 +97,14 @@
 .definition-content h2 {
   margin: 0 0 16px 0;
   color: var(--text-primary);
-  font-size: 1.8rem;
+  font-size: clamp(1.3rem, 4vw, 1.8rem);
 }
 
 .definition-main {
-  font-size: 1.15rem;
+  font-size: clamp(0.95rem, 2vw, 1.15rem);
   line-height: 1.8;
   color: var(--text-secondary);
-  margin-bottom: 24px;
+  margin-bottom: clamp(16px, 3vw, 24px);
 }
 
 .highlight-term {
@@ -207,8 +207,8 @@
 
 .input-card {
   background: var(--tile-bg);
-  border-radius: 16px;
-  padding: 32px;
+  border-radius: clamp(12px, 2vw, 16px);
+  padding: clamp(16px, 4vw, 32px);
   box-shadow: 0 4px 20px rgba(45, 27, 78, 0.08);
 }
 
@@ -316,10 +316,10 @@
 /* UPGMA Section */
 .upgma-section {
   background: var(--tile-bg);
-  border-radius: 20px;
-  padding: 32px;
+  border-radius: clamp(12px, 3vw, 20px);
+  padding: clamp(16px, 4vw, 32px);
   box-shadow: 0 8px 32px rgba(45, 27, 78, 0.1);
-  margin-bottom: 32px;
+  margin-bottom: clamp(16px, 4vw, 32px);
 }
 
 .upgma-header {
@@ -341,16 +341,16 @@
 /* Step Content */
 .step-content {
   display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
-  gap: 24px;
-  margin-bottom: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 350px), 1fr));
+  gap: clamp(16px, 3vw, 24px);
+  margin-bottom: clamp(16px, 3vw, 24px);
 }
 
 .step-info {
   background: var(--bg-secondary);
   border-radius: 12px;
-  padding: 24px;
-  min-height: 400px;
+  padding: clamp(16px, 3vw, 24px);
+  min-height: clamp(300px, 45vh, 400px);
 }
 
 .step-header {
@@ -519,8 +519,8 @@
 .tree-visualization {
   background: var(--bg-secondary);
   border-radius: 12px;
-  padding: 20px;
-  min-height: 400px;
+  padding: clamp(12px, 2vw, 20px);
+  min-height: clamp(300px, 45vh, 400px);
 }
 
 .tree-visualization h4 {
@@ -532,8 +532,8 @@
 .tree-display {
   background: white;
   border-radius: 8px;
-  padding: 20px;
-  min-height: 300px;
+  padding: clamp(12px, 2vw, 20px);
+  min-height: clamp(200px, 35vh, 300px);
 }
 
 .tree-initial {
@@ -682,8 +682,8 @@
 /* Algorithm Section */
 .algorithm-section {
   background: var(--tile-bg);
-  border-radius: 20px;
-  padding: 32px;
+  border-radius: clamp(12px, 3vw, 20px);
+  padding: clamp(16px, 4vw, 32px);
   box-shadow: 0 8px 32px rgba(45, 27, 78, 0.1);
 }
 
@@ -738,7 +738,7 @@
   line-height: 1.5;
 }
 
-/* Responsive */
+/* Responsive - Tablets */
 @media (max-width: 900px) {
   .definition-card {
     grid-template-columns: 1fr;
@@ -749,11 +749,164 @@
     grid-template-columns: 1fr;
   }
 
-  .step-content {
-    grid-template-columns: 1fr;
-  }
-
   .input-mode-selector {
     flex-direction: column;
+  }
+  
+  .algo-step {
+    padding: 16px;
+  }
+  
+  .algo-step-num {
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+  }
+}
+
+/* Responsive - Small tablets */
+@media (max-width: 600px) {
+  .dm-header h1 {
+    font-size: 1.4rem;
+  }
+  
+  .back-button {
+    padding: 8px 16px;
+    font-size: 0.85rem;
+  }
+  
+  .definition-section {
+    margin-bottom: 24px;
+  }
+  
+  .input-card h2 {
+    font-size: 1.2rem;
+  }
+  
+  .mode-btn {
+    padding: 8px 16px;
+    font-size: 0.85rem;
+  }
+  
+  .parse-btn {
+    padding: 10px 24px;
+    font-size: 0.9rem;
+  }
+  
+  .step-header h3 {
+    font-size: 1rem;
+  }
+  
+  .step-badge {
+    padding: 4px 10px;
+    font-size: 0.75rem;
+  }
+  
+  .matrix-table th,
+  .matrix-table td {
+    padding: 6px 8px;
+    font-size: 0.75rem;
+  }
+  
+  .matrix-table .matrix-header {
+    min-width: 45px;
+    font-size: 0.75rem;
+  }
+  
+  .merge-details {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .merge-arrow {
+    transform: rotate(90deg);
+  }
+  
+  .step-navigation {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  
+  .nav-button {
+    padding: 8px 16px;
+    font-size: 0.85rem;
+  }
+  
+  .step-dot {
+    width: 10px;
+    height: 10px;
+  }
+  
+  .algo-step {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .algo-step-num {
+    margin: 0 auto;
+  }
+}
+
+/* Responsive - Mobile phones */
+@media (max-width: 480px) {
+  .dm-main {
+    padding: 12px 8px;
+  }
+  
+  .definition-card {
+    padding: 16px;
+    border-radius: 12px;
+  }
+  
+  .input-card {
+    padding: 12px;
+  }
+  
+  .input-group input,
+  .input-group textarea {
+    padding: 10px 12px;
+    font-size: 0.85rem;
+  }
+  
+  .input-group textarea {
+    min-height: 100px;
+  }
+  
+  .upgma-section {
+    padding: 12px;
+  }
+  
+  .step-info {
+    padding: 12px;
+  }
+  
+  .tree-visualization {
+    padding: 12px;
+  }
+  
+  .tree-display {
+    padding: 12px;
+  }
+  
+  .taxon-badge {
+    padding: 6px 12px;
+    font-size: 0.85rem;
+  }
+  
+  .newick-output {
+    font-size: 0.75rem;
+    padding: 10px 12px;
+  }
+  
+  .algorithm-section {
+    padding: 16px 12px;
+  }
+  
+  .upgma-header h2 {
+    font-size: 1.3rem;
+  }
+  
+  .algorithm-section h2 {
+    font-size: 1.3rem;
   }
 }

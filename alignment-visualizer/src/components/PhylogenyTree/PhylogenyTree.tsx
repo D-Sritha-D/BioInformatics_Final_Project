@@ -539,10 +539,10 @@ const PhylogenyTree: React.FC<PhylogenyTreeProps> = ({ onNavigateToHomepage }) =
                       data={currentNewickStep.treeState}
                       orientation="vertical"
                       pathFunc="step"
-                      translate={{ x: 280, y: 50 }}
-                      nodeSize={{ x: 150, y: 110 }}
+                      translate={{ x: 250, y: 40 }}
+                      nodeSize={{ x: 140, y: 100 }}
                       renderCustomNodeElement={renderCustomNode}
-                      zoom={0.75}
+                      zoom={0.65}
                       enableLegacyTransitions
                     />
                   </div>
@@ -625,10 +625,10 @@ const PhylogenyTree: React.FC<PhylogenyTreeProps> = ({ onNavigateToHomepage }) =
                     data={currentCanonicalStep.treeState}
                     orientation="vertical"
                     pathFunc="step"
-                    translate={{ x: 280, y: 50 }}
-                    nodeSize={{ x: 150, y: 110 }}
+                    translate={{ x: 250, y: 40 }}
+                    nodeSize={{ x: 140, y: 100 }}
                     renderCustomNodeElement={renderCustomNode}
-                    zoom={0.7}
+                    zoom={0.6}
                     enableLegacyTransitions
                   />
                 </div>
