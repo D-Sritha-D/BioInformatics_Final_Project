@@ -6,6 +6,7 @@ import {
   StepVisualizer,
   Homepage,
   ScoringMatrix,
+  SuffixTree,
 } from './components';
 import { globalAlignment, localAlignment, dovetailAlignment, bandedAlignment } from './algorithms';
 import type {
@@ -16,7 +17,7 @@ import type {
 } from './types';
 import './App.css';
 
-type PageType = 'homepage' | 'alignment' | 'scoring-matrix';
+type PageType = 'homepage' | 'alignment' | 'scoring-matrix' | 'suffix-tree';
 
 function App() {
   const [currentPage, setCurrentPage] = useState<PageType>('homepage');
@@ -87,6 +88,10 @@ function App() {
     setCurrentPage('scoring-matrix');
   }, []);
 
+  const handleNavigateToSuffixTree = useCallback(() => {
+    setCurrentPage('suffix-tree');
+  }, []);
+
   const handleAlgorithmChange = useCallback((algo: AlgorithmType) => {
     setAlgorithm(algo);
     // Clear previous results to avoid confusion when switching algorithms
@@ -100,12 +105,17 @@ function App() {
       <Homepage 
         onNavigateToVisualizer={handleNavigateToVisualizer} 
         onNavigateToScoringMatrix={handleNavigateToScoringMatrix}
+        onNavigateToSuffixTree={handleNavigateToSuffixTree}
       />
     );
   }
 
   if (currentPage === 'scoring-matrix') {
     return <ScoringMatrix onNavigateToHomepage={handleNavigateToHomepage} />;
+  }
+
+  if (currentPage === 'suffix-tree') {
+    return <SuffixTree onNavigateToHomepage={handleNavigateToHomepage} />;
   }
 
   return (
