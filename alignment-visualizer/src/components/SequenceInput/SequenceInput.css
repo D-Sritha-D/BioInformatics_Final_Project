@@ -102,17 +102,21 @@
 .example-btn {
   margin-top: 12px;
   padding: 8px 16px;
-  background: #ecf0f1;
-  border: none;
+  background: transparent;
+  border: 2px solid var(--primary);
   border-radius: 6px;
   cursor: pointer;
   font-size: 14px;
-  color: #555;
-  transition: background 0.2s;
+  font-weight: 600;
+  color: var(--primary);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .example-btn:hover {
-  background: #d5dbdb;
+  background: var(--primary);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(45, 27, 78, 0.2);
 }
 
 .algorithm-section {
