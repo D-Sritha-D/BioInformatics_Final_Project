@@ -10,9 +10,10 @@ interface ConceptCard {
 
 interface HomepageProps {
   onNavigateToVisualizer?: () => void;
+  onNavigateToScoringMatrix?: () => void;
 }
 
-const Homepage: React.FC<HomepageProps> = ({ onNavigateToVisualizer }) => {
+const Homepage: React.FC<HomepageProps> = ({ onNavigateToVisualizer, onNavigateToScoringMatrix }) => {
   const concepts: ConceptCard[] = [
     {
     id: 'global-alignment',
@@ -39,6 +40,10 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigateToVisualizer }) => {
     // Navigate to visualizer for alignment-related concepts
     if ((conceptId === 'global-alignment' || conceptId === 'banded-alignment') && onNavigateToVisualizer) {
       onNavigateToVisualizer();
+    }
+    // Navigate to scoring matrix page
+    if (conceptId === 'scoring-matrix' && onNavigateToScoringMatrix) {
+      onNavigateToScoringMatrix();
     }
     // Implement navigation to concept detail page for others
   };

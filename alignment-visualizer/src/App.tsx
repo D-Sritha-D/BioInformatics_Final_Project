@@ -5,6 +5,7 @@ import {
   AlignmentResult,
   StepVisualizer,
   Homepage,
+  ScoringMatrix,
 } from './components';
 import { globalAlignment, localAlignment, dovetailAlignment, bandedAlignment } from './algorithms';
 import type {
@@ -15,8 +16,10 @@ import type {
 } from './types';
 import './App.css';
 
+type PageType = 'homepage' | 'alignment' | 'scoring-matrix';
+
 function App() {
-  const [showHomepage, setShowHomepage] = useState(true);
+  const [currentPage, setCurrentPage] = useState<PageType>('homepage');
   const [result, setResult] = useState<AlignmentResultType | null>(null);
   const [sequences, setSequences] = useState<{ seq1: string; seq2: string }>({
     seq1: '',
@@ -68,7 +71,7 @@ function App() {
   }, []);
 
   const handleNavigateToVisualizer = useCallback(() => {
-    setShowHomepage(false);
+    setCurrentPage('alignment');
     // Reset to default state when coming from homepage
     setResult(null);
     setCurrentStep(undefined);
@@ -77,7 +80,11 @@ function App() {
   }, []);
 
   const handleNavigateToHomepage = useCallback(() => {
-    setShowHomepage(true);
+    setCurrentPage('homepage');
+  }, []);
+
+  const handleNavigateToScoringMatrix = useCallback(() => {
+    setCurrentPage('scoring-matrix');
   }, []);
 
   const handleAlgorithmChange = useCallback((algo: AlgorithmType) => {
@@ -88,8 +95,17 @@ function App() {
     setIsPlaying(false);
   }, []);
 
-  if (showHomepage) {
-    return <Homepage onNavigateToVisualizer={handleNavigateToVisualizer} />;
+  if (currentPage === 'homepage') {
+    return (
+      <Homepage 
+        onNavigateToVisualizer={handleNavigateToVisualizer} 
+        onNavigateToScoringMatrix={handleNavigateToScoringMatrix}
+      />
+    );
+  }
+
+  if (currentPage === 'scoring-matrix') {
+    return <ScoringMatrix onNavigateToHomepage={handleNavigateToHomepage} />;
   }
 
   return (
