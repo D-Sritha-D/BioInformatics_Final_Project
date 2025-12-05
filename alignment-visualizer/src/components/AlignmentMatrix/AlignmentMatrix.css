@@ -1,7 +1,7 @@
 .matrix-container {
   background: var(--tile-bg);
-  border-radius: 20px;
-  padding: 28px;
+  border-radius: clamp(12px, 3vw, 20px);
+  padding: clamp(16px, 3vw, 28px);
   box-shadow: 0 8px 32px rgba(45, 27, 78, 0.1);
   overflow: hidden;
   border: 1px solid rgba(45, 27, 78, 0.05);
@@ -35,9 +35,9 @@
 .alignment-matrix th,
 .alignment-matrix td {
   display: table-cell;
-  width: 60px;
-  min-width: 60px;
-  height: 60px;
+  width: clamp(40px, 8vw, 60px);
+  min-width: clamp(40px, 8vw, 60px);
+  height: clamp(40px, 8vw, 60px);
   text-align: center;
   vertical-align: middle;
   border: 1px solid #ddd;
@@ -61,7 +61,7 @@
 
 .seq-char {
   color: var(--primary);
-  font-size: 18px;
+  font-size: clamp(14px, 2.5vw, 18px);
 }
 
 .matrix-cell {
@@ -154,7 +154,7 @@
 }
 
 .cell-score {
-  font-size: 16px;
+  font-size: clamp(12px, 2vw, 16px);
   font-weight: 600;
   color: var(--text-primary);
 }

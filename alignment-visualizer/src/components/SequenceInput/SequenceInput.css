@@ -1,17 +1,17 @@
 .sequence-input-container {
   background: var(--tile-bg);
-  border-radius: 20px;
-  padding: 32px;
+  border-radius: clamp(12px, 3vw, 20px);
+  padding: clamp(16px, 4vw, 32px);
   box-shadow: 0 8px 32px rgba(45, 27, 78, 0.1);
-  margin-bottom: 28px;
+  margin-bottom: clamp(16px, 4vw, 28px);
   border: 1px solid rgba(45, 27, 78, 0.05);
 }
 
 .sequence-input-container h2 {
   margin-top: 0;
-  margin-bottom: 24px;
+  margin-bottom: clamp(16px, 3vw, 24px);
   color: var(--text-primary);
-  font-size: 1.6rem;
+  font-size: clamp(1.2rem, 3vw, 1.6rem);
   font-weight: 700;
 }
 
@@ -125,17 +125,17 @@
 
 .algorithm-selector {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
+  gap: clamp(12px, 2vw, 16px);
 }
 
 .algorithm-option {
   display: flex;
   align-items: flex-start;
-  gap: 14px;
-  padding: 20px;
+  gap: clamp(10px, 2vw, 14px);
+  padding: clamp(12px, 3vw, 20px);
   border: 2px solid var(--border-color);
-  border-radius: 16px;
+  border-radius: clamp(10px, 2vw, 16px);
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   background: var(--bg-secondary);
