@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import {
   SequenceInput,
   AlignmentMatrix,
@@ -22,8 +22,20 @@ import './App.css';
 
 type PageType = 'homepage' | 'alignment' | 'scoring-matrix' | 'suffix-tree' | 'phylogeny' | 'distance-matrix' | 'protein-structure';
 
+// Helper function to get page from URL hash
+const getPageFromHash = (): PageType => {
+  const hash = window.location.hash.slice(1); // Remove the '#'
+  const validPages: PageType[] = ['homepage', 'alignment', 'scoring-matrix', 'suffix-tree', 'phylogeny', 'distance-matrix'];
+  return validPages.includes(hash as PageType) ? (hash as PageType) : 'homepage';
+};
+
+// Helper function to set URL hash
+const setHashForPage = (page: PageType) => {
+  window.location.hash = page;
+};
+
 function App() {
-  const [currentPage, setCurrentPage] = useState<PageType>('homepage');
+  const [currentPage, setCurrentPage] = useState<PageType>(getPageFromHash);
   const [result, setResult] = useState<AlignmentResultType | null>(null);
   const [sequences, setSequences] = useState<{ seq1: string; seq2: string }>({
     seq1: '',
@@ -34,6 +46,21 @@ function App() {
   const [currentStep, setCurrentStep] = useState<number | undefined>(undefined);
   const [isPlaying, setIsPlaying] = useState(false);
   const [showStepVisualizer, setShowStepVisualizer] = useState(false);
+
+  // Listen for hash changes (browser back/forward buttons)
+  useEffect(() => {
+    const handleHashChange = () => {
+      setCurrentPage(getPageFromHash());
+    };
+    
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
+  // Update hash when page changes
+  useEffect(() => {
+    setHashForPage(currentPage);
+  }, [currentPage]);
 
   const handleAlign = useCallback(
     (

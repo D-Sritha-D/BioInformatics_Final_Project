@@ -7,7 +7,7 @@
 .phylogeny-header {
   background: linear-gradient(135deg, var(--primary), var(--primary-light));
   color: white;
-  padding: 48px 24px;
+  padding: clamp(24px, 5vw, 48px) clamp(16px, 4vw, 24px);
   text-align: center;
   position: relative;
   overflow: hidden;
@@ -33,7 +33,7 @@
 
 .phylogeny-header h1 {
   margin: 0 0 16px 0;
-  font-size: 2.5rem;
+  font-size: clamp(1.5rem, 5vw, 2.5rem);
   font-weight: 800;
   text-shadow: 0 2px 10px rgba(0,0,0,0.2);
 }
@@ -57,9 +57,9 @@
 
 /* Main Content */
 .phylogeny-main {
-  max-width: 1200px;
+  max-width: min(1400px, 95vw);
   margin: 0 auto;
-  padding: 32px 24px;
+  padding: clamp(16px, 4vw, 32px) clamp(12px, 3vw, 24px);
 }
 
 /* Definition Section */
@@ -69,12 +69,12 @@
 
 .definition-card {
   background: var(--tile-bg);
-  border-radius: 20px;
-  padding: 40px;
+  border-radius: clamp(12px, 3vw, 20px);
+  padding: clamp(20px, 4vw, 40px) clamp(20px, 5vw, 48px);
   box-shadow: 0 8px 32px rgba(45, 27, 78, 0.1);
   display: grid;
-  grid-template-columns: 200px 1fr;
-  gap: 40px;
+  grid-template-columns: minmax(120px, 180px) 1fr;
+  gap: clamp(24px, 5vw, 48px);
   align-items: center;
 }
 
@@ -87,7 +87,7 @@
 }
 
 .tree-icon-large {
-  font-size: 80px;
+  font-size: clamp(50px, 10vw, 80px);
   animation: sway 3s ease-in-out infinite;
 }
 
@@ -118,14 +118,14 @@
 .definition-content h2 {
   margin: 0 0 16px 0;
   color: var(--text-primary);
-  font-size: 1.8rem;
+  font-size: clamp(1.3rem, 4vw, 1.8rem);
 }
 
 .definition-main {
-  font-size: 1.15rem;
+  font-size: clamp(0.95rem, 2vw, 1.15rem);
   line-height: 1.8;
   color: var(--text-secondary);
-  margin-bottom: 24px;
+  margin-bottom: clamp(16px, 3vw, 24px);
 }
 
 .highlight-term {
@@ -256,13 +256,15 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 24px 40px;
+  padding: clamp(16px, 3vw, 24px) clamp(24px, 4vw, 40px);
   background: var(--tile-bg);
   border: 2px solid var(--border-color);
   border-radius: 16px;
   cursor: pointer;
   transition: all 0.3s ease;
-  min-width: 220px;
+  min-width: min(220px, 45vw);
+  flex: 1;
+  max-width: 280px;
 }
 
 .mode-button:hover {
@@ -405,22 +407,24 @@
 /* Step Content */
 .step-content {
   display: grid;
-  grid-template-columns: 1fr 1.5fr;
-  gap: 24px;
-  margin-bottom: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr));
+  gap: clamp(16px, 3vw, 32px);
+  margin-bottom: clamp(16px, 3vw, 24px);
 }
 
 .canonical-content {
-  grid-template-columns: 1fr 1.3fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
 }
 
 .step-info {
   background: var(--bg-secondary);
   border-radius: 12px;
-  padding: 24px;
-  min-height: 480px;
-  max-height: 520px;
+  padding: clamp(16px, 3vw, 24px);
+  min-width: 0;
+  min-height: clamp(350px, 50vh, 500px);
+  max-height: clamp(400px, 60vh, 540px);
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .step-header {
@@ -532,11 +536,14 @@
 .tree-visualization {
   background: var(--bg-secondary);
   border-radius: 12px;
-  padding: 20px;
+  padding: clamp(16px, 3vw, 24px);
   display: flex;
   flex-direction: column;
-  min-height: 520px;
-  height: 520px;
+  min-width: 0;
+  max-width: 100%;
+  min-height: clamp(350px, 50vh, 540px);
+  height: clamp(400px, 60vh, 540px);
+  overflow: hidden;
 }
 
 .tree-visualization h4 {
@@ -547,18 +554,13 @@
 
 .tree-container {
   flex: 1;
-  min-height: 400px;
-  height: 450px;
-  min-width: 450px;
   background: white;
   border-radius: 8px;
   overflow: hidden;
 }
 
 .tree-container-large {
-  min-height: 450px;
-  height: 450px;
-  min-width: 500px;
+  min-height: clamp(300px, 45vh, 450px);
 }
 
 .tree-placeholder {
@@ -567,7 +569,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 300px;
+  min-height: clamp(200px, 35vh, 300px);
   color: var(--text-secondary);
 }
 
@@ -658,7 +660,8 @@
 .legend-items {
   display: flex;
   justify-content: center;
-  gap: 40px;
+  flex-wrap: wrap;
+  gap: clamp(20px, 4vw, 40px);
 }
 
 .legend-item {
@@ -695,7 +698,19 @@
   font-size: 0.9rem;
 }
 
-/* Responsive */
+/* Responsive - Large screens */
+@media (max-width: 1200px) {
+  .definition-card {
+    grid-template-columns: 140px 1fr;
+    gap: 32px;
+  }
+  
+  .key-concepts {
+    gap: 12px;
+  }
+}
+
+/* Responsive - Tablets */
 @media (max-width: 900px) {
   .definition-card {
     grid-template-columns: 1fr;
@@ -703,10 +718,6 @@
   }
 
   .key-concepts {
-    grid-template-columns: 1fr;
-  }
-
-  .step-content {
     grid-template-columns: 1fr;
   }
 
@@ -719,10 +730,182 @@
     align-items: center;
   }
 
+  .mode-button {
+    width: 100%;
+    max-width: 320px;
+  }
+
   .legend-items {
     flex-direction: column;
     align-items: center;
     gap: 16px;
+  }
+  
+  .format-section {
+    padding: 24px 16px;
+  }
+  
+  .newick-display {
+    font-size: 0.95rem;
+    padding: 12px;
+  }
+  
+  .distance-matrix th,
+  .distance-matrix td {
+    padding: 8px 10px;
+    font-size: 0.85rem;
+  }
+}
+
+/* Responsive - Small tablets and large phones */
+@media (max-width: 600px) {
+  .phylogeny-header h1 {
+    font-size: 1.4rem;
+  }
+  
+  .back-button {
+    padding: 8px 16px;
+    font-size: 0.85rem;
+  }
+  
+  .definition-section {
+    margin-bottom: 32px;
+  }
+  
+  .mode-section h2 {
+    font-size: 1.3rem;
+  }
+  
+  .mode-selector {
+    gap: 12px;
+  }
+  
+  .step-header h3 {
+    font-size: 1rem;
+  }
+  
+  .step-badge {
+    padding: 4px 10px;
+    font-size: 0.75rem;
+  }
+  
+  .step-navigation {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  
+  .nav-button {
+    padding: 10px 18px;
+    font-size: 0.9rem;
+  }
+  
+  .legend-section {
+    padding: 16px;
+  }
+  
+  .legend-node {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .legend-line {
+    width: 30px;
+  }
+  
+  .concept-item {
+    padding: 12px;
+    gap: 10px;
+  }
+  
+  .sorting-table th,
+  .sorting-table td {
+    padding: 6px 8px;
+    font-size: 0.8rem;
+  }
+}
+
+/* Responsive - Mobile phones */
+@media (max-width: 480px) {
+  .phylogeny-main {
+    padding: 12px 8px;
+  }
+  
+  .definition-card {
+    padding: 16px;
+    border-radius: 12px;
+  }
+  
+  .format-section {
+    padding: 16px 12px;
+    border-radius: 12px;
+  }
+  
+  .example-box {
+    padding: 12px;
+  }
+  
+  .newick-display {
+    font-size: 0.8rem;
+    padding: 10px;
+  }
+  
+  .step-info,
+  .tree-visualization {
+    padding: 12px;
+    border-radius: 8px;
+  }
+  
+  .step-explanation {
+    padding: 12px;
+    gap: 8px;
+  }
+  
+  .explanation-icon {
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+  }
+  
+  .mode-button {
+    padding: 12px 16px;
+  }
+  
+  .mode-icon {
+    width: 32px;
+    height: 32px;
+  }
+  
+  .mode-name {
+    font-size: 1rem;
+  }
+  
+  .mode-desc {
+    font-size: 0.8rem;
+  }
+  
+  .step-dot {
+    width: 10px;
+    height: 10px;
+  }
+  
+  .matrix-display {
+    margin: 12px 0;
+    overflow-x: auto;
+  }
+  
+  .distance-matrix {
+    font-size: 0.75rem;
+    min-width: 280px;
+  }
+  
+  .distance-matrix th,
+  .distance-matrix td {
+    padding: 6px 8px;
+  }
+  
+  .comparison-item code {
+    font-size: 0.75rem;
+    padding: 8px;
   }
 }
 
