@@ -168,6 +168,12 @@
   border: 1px solid rgba(45, 27, 78, 0.05);
 }
 
+.algorithm-info-card.full-width {
+  grid-column: 1 / -1;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
 .algorithm-info-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 12px 32px rgba(45, 27, 78, 0.12);
@@ -176,15 +182,18 @@
 .algorithm-info-card h3 {
   margin-top: 0;
   color: var(--text-primary);
-  font-size: 1.3rem;
-  margin-bottom: 14px;
+  font-size: 1.5rem;
+  margin-bottom: 16px;
   font-weight: 700;
+  padding-bottom: 12px;
+  border-bottom: 2px solid rgba(45, 27, 78, 0.1);
 }
 
-.algorithm-info-card p {
+.algorithm-info-card > p {
   color: var(--text-secondary);
-  line-height: 1.6;
-  margin-bottom: 16px;
+  line-height: 1.7;
+  margin-bottom: 24px;
+  font-size: 1.05rem;
 }
 
 .algorithm-info-card ul {
@@ -194,7 +203,120 @@
 }
 
 .algorithm-info-card li {
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+/* Formula Section Styles */
+.formula-section {
+  background: linear-gradient(135deg, rgba(45, 27, 78, 0.03), rgba(45, 27, 78, 0.06));
+  border-radius: 12px;
+  padding: 20px 24px;
+  margin-bottom: 24px;
+  border-left: 4px solid var(--primary);
+}
+
+.formula-section h4 {
+  margin: 0 0 12px 0;
+  color: var(--primary);
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.formula {
+  background: var(--tile-bg);
+  border-radius: 8px;
+  padding: 16px 20px;
+  font-family: 'Fira Code', 'SF Mono', 'Monaco', monospace;
+  font-size: 0.95rem;
+  line-height: 1.8;
+  overflow-x: auto;
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.formula code {
+  color: var(--text-primary);
+}
+
+.formula-comment {
+  color: #6a9955;
+  font-style: italic;
+  font-size: 0.85rem;
+}
+
+.formula-legend {
+  margin: 12px 0 0 0;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+/* Info Grid for algorithm details */
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.info-item {
+  background: rgba(45, 27, 78, 0.03);
+  border-radius: 10px;
+  padding: 16px;
+  text-align: center;
+}
+
+.info-item h4 {
+  margin: 0 0 8px 0;
+  color: var(--primary);
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.info-item p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* Use Cases Section */
+.use-cases {
+  background: rgba(45, 27, 78, 0.02);
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin-bottom: 16px;
+}
+
+.use-cases h4 {
+  margin: 0 0 12px 0;
+  color: var(--primary);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.use-cases ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.use-cases li {
+  color: var(--text-secondary);
   margin-bottom: 6px;
+}
+
+/* Warning Box for Banded Alignment */
+.warning-box {
+  background: linear-gradient(135deg, rgba(255, 193, 7, 0.1), rgba(255, 152, 0, 0.1));
+  border: 1px solid rgba(255, 152, 0, 0.3);
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 0.9rem;
+  color: #856404;
+  margin-top: 8px;
+}
+
+.warning-box strong {
+  color: #e65100;
 }
 
 .app-footer {

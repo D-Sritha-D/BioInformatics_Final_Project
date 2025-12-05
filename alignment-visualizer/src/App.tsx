@@ -69,10 +69,23 @@ function App() {
 
   const handleNavigateToVisualizer = useCallback(() => {
     setShowHomepage(false);
+    // Reset to default state when coming from homepage
+    setResult(null);
+    setCurrentStep(undefined);
+    setIsPlaying(false);
+    setAlgorithm('global');
   }, []);
 
   const handleNavigateToHomepage = useCallback(() => {
     setShowHomepage(true);
+  }, []);
+
+  const handleAlgorithmChange = useCallback((algo: AlgorithmType) => {
+    setAlgorithm(algo);
+    // Clear previous results to avoid confusion when switching algorithms
+    setResult(null);
+    setCurrentStep(undefined);
+    setIsPlaying(false);
   }, []);
 
   if (showHomepage) {
@@ -84,9 +97,6 @@ function App() {
       <header className="app-header">
         <div className="header-content">
           <h1>🧬 Sequence Alignment</h1>
-          <p className="subtitle">
-            Interactive visualization of bioinformatics alignment algorithms
-          </p>
           <button
             onClick={handleNavigateToHomepage}
             style={{
@@ -109,7 +119,7 @@ function App() {
 
       <main className="app-main">
         <div className="input-panel">
-          <SequenceInput onAlign={handleAlign} />
+          <SequenceInput onAlign={handleAlign} onAlgorithmChange={handleAlgorithmChange} />
         </div>
 
         {result && (
@@ -177,61 +187,252 @@ function App() {
         )}
 
         <section className="info-section">
-          <div className="algorithm-info-card">
-            <h3>🎯 Global Alignment (Needleman-Wunsch)</h3>
-            <p>
-              The Needleman-Wunsch algorithm finds the best alignment between two
-              sequences over their entire lengths. It uses dynamic programming to
-              fill a scoring matrix and traceback to find the optimal path.
-            </p>
-            <ul>
-              <li>Time Complexity: O(m × n)</li>
-              <li>Space Complexity: O(m × n)</li>
-              <li>Best for: Comparing sequences of similar length</li>
-            </ul>
-          </div>
+          {algorithm === 'global' && (
+            <div className="algorithm-info-card full-width">
+              <h3>Global Alignment (Needleman-Wunsch)</h3>
+              <p>
+                The Needleman-Wunsch algorithm finds the optimal alignment between two
+                sequences over their <strong>entire lengths</strong>. Published in 1970, it was
+                the first application of dynamic programming to biological sequence comparison.
+              </p>
+              
+              <div className="formula-section">
+                <h4>Recurrence Relation</h4>
+                <div className="formula">
+                  <code>
+                    F(i,j) = max {'{'}
+                    <br />
+                    &nbsp;&nbsp;F(i-1, j-1) + S(xᵢ, yⱼ),&nbsp;&nbsp;<span className="formula-comment">// Match/Mismatch</span>
+                    <br />
+                    &nbsp;&nbsp;F(i-1, j) + d,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="formula-comment">// Gap in sequence Y</span>
+                    <br />
+                    &nbsp;&nbsp;F(i, j-1) + d&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="formula-comment">// Gap in sequence X</span>
+                    <br />
+                    {'}'}
+                  </code>
+                </div>
+                <p className="formula-legend">
+                  Where: <strong>S(xᵢ, yⱼ)</strong> = substitution score (match/mismatch), <strong>d</strong> = gap penalty
+                </p>
+              </div>
 
-          <div className="algorithm-info-card">
-            <h3>🔍 Local Alignment (Smith-Waterman)</h3>
-            <p>
-              The Smith-Waterman algorithm finds the best local alignment by
-              identifying the highest-scoring subsequence match. Negative scores
-              reset to zero, allowing alignment to start and end anywhere.
-            </p>
-            <ul>
-              <li>Time Complexity: O(m × n)</li>
-              <li>Space Complexity: O(m × n)</li>
-              <li>Best for: Finding conserved regions or motifs</li>
-            </ul>
-          </div>
+              <div className="info-grid">
+                <div className="info-item">
+                  <h4>Initialization</h4>
+                  <p>F(i,0) = i × d<br/>F(0,j) = j × d</p>
+                </div>
+                <div className="info-item">
+                  <h4>Traceback</h4>
+                  <p>Starts from F(m,n) and traces back to F(0,0)</p>
+                </div>
+                <div className="info-item">
+                  <h4>Time Complexity</h4>
+                  <p>O(m × n)</p>
+                </div>
+                <div className="info-item">
+                  <h4>Space Complexity</h4>
+                  <p>O(m × n)</p>
+                </div>
+              </div>
 
-          <div className="algorithm-info-card">
-            <h3>🔗 Dovetail Alignment (Semi-Global)</h3>
-            <p>
-              Dovetail alignment finds overlapping alignments between sequences,
-              allowing free gaps at sequence ends. It's ideal for sequence
-              assembly where fragments overlap.
-            </p>
-            <ul>
-              <li>Time Complexity: O(m × n)</li>
-              <li>Space Complexity: O(m × n)</li>
-              <li>Best for: Sequence assembly, finding overlaps</li>
-            </ul>
-          </div>
+              <div className="use-cases">
+                <h4>Best Use Cases</h4>
+                <ul>
+                  <li>Comparing full-length gene sequences</li>
+                  <li>Protein sequence comparison</li>
+                  <li>Evolutionary relationship analysis</li>
+                  <li>When sequences are expected to be similar throughout</li>
+                </ul>
+              </div>
+            </div>
+          )}
 
-          <div className="algorithm-info-card">
-            <h3>📏 Banded Alignment</h3>
-            <p>
-              Banded alignment is an optimization that only considers cells within
-              a diagonal band of width k. This assumes the optimal alignment stays
-              close to the main diagonal.
-            </p>
-            <ul>
-              <li>Time Complexity: O(k × n)</li>
-              <li>Space Complexity: O(k × n)</li>
-              <li>Best for: Similar sequences where gaps are limited</li>
-            </ul>
-          </div>
+          {algorithm === 'local' && (
+            <div className="algorithm-info-card full-width">
+              <h3>Local Alignment (Smith-Waterman)</h3>
+              <p>
+                The Smith-Waterman algorithm finds the <strong>highest-scoring local subsequence</strong> alignment.
+                Published in 1981, it modifies Needleman-Wunsch by allowing alignment to start and end anywhere,
+                making it ideal for finding conserved regions.
+              </p>
+              
+              <div className="formula-section">
+                <h4>Recurrence Relation</h4>
+                <div className="formula">
+                  <code>
+                    F(i,j) = max {'{'}
+                    <br />
+                    &nbsp;&nbsp;0,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="formula-comment">// Reset (key difference!)</span>
+                    <br />
+                    &nbsp;&nbsp;F(i-1, j-1) + S(xᵢ, yⱼ),&nbsp;&nbsp;<span className="formula-comment">// Match/Mismatch</span>
+                    <br />
+                    &nbsp;&nbsp;F(i-1, j) + d,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="formula-comment">// Gap in sequence Y</span>
+                    <br />
+                    &nbsp;&nbsp;F(i, j-1) + d&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="formula-comment">// Gap in sequence X</span>
+                    <br />
+                    {'}'}
+                  </code>
+                </div>
+                <p className="formula-legend">
+                  Key difference: Scores <strong>cannot go below 0</strong>, allowing alignment to restart anywhere.
+                </p>
+              </div>
+
+              <div className="info-grid">
+                <div className="info-item">
+                  <h4>Initialization</h4>
+                  <p>F(i,0) = 0<br/>F(0,j) = 0</p>
+                </div>
+                <div className="info-item">
+                  <h4>Traceback</h4>
+                  <p>Starts from the <strong>maximum score cell</strong> and ends at any cell with score 0</p>
+                </div>
+                <div className="info-item">
+                  <h4>Time Complexity</h4>
+                  <p>O(m × n)</p>
+                </div>
+                <div className="info-item">
+                  <h4>Space Complexity</h4>
+                  <p>O(m × n)</p>
+                </div>
+              </div>
+
+              <div className="use-cases">
+                <h4>Best Use Cases</h4>
+                <ul>
+                  <li>Finding conserved domains in proteins</li>
+                  <li>Identifying motifs in DNA sequences</li>
+                  <li>Database searching (BLAST uses similar concepts)</li>
+                  <li>When only parts of sequences are expected to match</li>
+                </ul>
+              </div>
+            </div>
+          )}
+
+          {algorithm === 'dovetail' && (
+            <div className="algorithm-info-card full-width">
+              <h3>Dovetail Alignment (Semi-Global)</h3>
+              <p>
+                Dovetail alignment is a <strong>semi-global</strong> approach that finds optimal overlapping
+                alignments. It allows free gaps at the beginning and end of sequences, making it perfect
+                for sequence assembly tasks.
+              </p>
+              
+              <div className="formula-section">
+                <h4>Recurrence Relation</h4>
+                <div className="formula">
+                  <code>
+                    F(i,j) = max {'{'}
+                    <br />
+                    &nbsp;&nbsp;F(i-1, j-1) + S(xᵢ, yⱼ),&nbsp;&nbsp;<span className="formula-comment">// Match/Mismatch</span>
+                    <br />
+                    &nbsp;&nbsp;F(i-1, j) + d,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="formula-comment">// Gap in sequence Y</span>
+                    <br />
+                    &nbsp;&nbsp;F(i, j-1) + d&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="formula-comment">// Gap in sequence X</span>
+                    <br />
+                    {'}'}
+                  </code>
+                </div>
+                <p className="formula-legend">
+                  Key difference: <strong>No penalty for leading/trailing gaps</strong> (first row and column initialized to 0).
+                </p>
+              </div>
+
+              <div className="info-grid">
+                <div className="info-item">
+                  <h4>Initialization</h4>
+                  <p>F(i,0) = 0 (no penalty)<br/>F(0,j) = 0 (no penalty)</p>
+                </div>
+                <div className="info-item">
+                  <h4>Traceback</h4>
+                  <p>Starts from <strong>max in last row or column</strong> (allows trailing gaps)</p>
+                </div>
+                <div className="info-item">
+                  <h4>Time Complexity</h4>
+                  <p>O(m × n)</p>
+                </div>
+                <div className="info-item">
+                  <h4>Space Complexity</h4>
+                  <p>O(m × n)</p>
+                </div>
+              </div>
+
+              <div className="use-cases">
+                <h4>Best Use Cases</h4>
+                <ul>
+                  <li>Sequence assembly (finding overlapping reads)</li>
+                  <li>Contig assembly in genome sequencing</li>
+                  <li>Finding how two fragments overlap at ends</li>
+                  <li>Primer alignment to templates</li>
+                </ul>
+              </div>
+            </div>
+          )}
+
+          {algorithm === 'banded' && (
+            <div className="algorithm-info-card full-width">
+              <h3>Banded Alignment</h3>
+              <p>
+                Banded alignment is an <strong>optimization of global alignment</strong> that only computes
+                cells within a diagonal band of width k. This significantly reduces computation time
+                when sequences are known to be similar.
+              </p>
+              
+              <div className="formula-section">
+                <h4>Recurrence Relation</h4>
+                <div className="formula">
+                  <code>
+                    F(i,j) = max {'{'}
+                    <br />
+                    &nbsp;&nbsp;F(i-1, j-1) + S(xᵢ, yⱼ),&nbsp;&nbsp;<span className="formula-comment">// if |i-j| ≤ k</span>
+                    <br />
+                    &nbsp;&nbsp;F(i-1, j) + d,&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="formula-comment">// if |i-j| ≤ k</span>
+                    <br />
+                    &nbsp;&nbsp;F(i, j-1) + d&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span className="formula-comment">// if |i-j| ≤ k</span>
+                    <br />
+                    {'}'}&nbsp;&nbsp;<strong>only when |i - j| ≤ k</strong>
+                  </code>
+                </div>
+                <p className="formula-legend">
+                  Key constraint: Only cells where <strong>|i - j| ≤ k</strong> (bandwidth) are computed. Cells outside band = -∞
+                </p>
+              </div>
+
+              <div className="info-grid">
+                <div className="info-item">
+                  <h4>Band Constraint</h4>
+                  <p>|i - j| ≤ k<br/>k = bandwidth parameter</p>
+                </div>
+                <div className="info-item">
+                  <h4>Traceback</h4>
+                  <p>Same as global alignment, but constrained within the band</p>
+                </div>
+                <div className="info-item">
+                  <h4>Time Complexity</h4>
+                  <p>O(k × n) — much faster!</p>
+                </div>
+                <div className="info-item">
+                  <h4>Space Complexity</h4>
+                  <p>O(k × n)</p>
+                </div>
+              </div>
+
+              <div className="use-cases">
+                <h4>Best Use Cases</h4>
+                <ul>
+                  <li>Aligning highly similar sequences</li>
+                  <li>When sequences have similar lengths</li>
+                  <li>Large-scale sequence comparisons</li>
+                  <li>When gaps are expected to be small and localized</li>
+                </ul>
+              </div>
+
+              <div className="warning-box">
+                <strong>Note:</strong> If the optimal alignment path goes outside the band, 
+                the result may be suboptimal. Choose bandwidth carefully based on expected divergence.
+              </div>
+            </div>
+          )}
         </section>
       </main>
 

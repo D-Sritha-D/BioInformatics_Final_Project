@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import type { ScoringParams, BandedParams, AlgorithmType, SequenceType } from '../../types';
+import type { ScoringParams, BandedParams, AlgorithmType } from '../../types';
 import './SequenceInput.css';
 
 interface SequenceInputProps {
@@ -9,18 +9,21 @@ interface SequenceInputProps {
     algorithm: AlgorithmType,
     params: ScoringParams | BandedParams
   ) => void;
+  onAlgorithmChange?: (algorithm: AlgorithmType) => void;
 }
 
-// DNA validation regex
+// DNA validation regex - only allows A, T, C, G characters
 const DNA_REGEX = /^[ATCG]*$/i;
-// Protein validation regex (20 standard amino acids)
-const PROTEIN_REGEX = /^[ACDEFGHIKLMNPQRSTVWY]*$/i;
 
-export function SequenceInput({ onAlign }: SequenceInputProps) {
+export function SequenceInput({ onAlign, onAlgorithmChange }: SequenceInputProps) {
   const [seq1, setSeq1] = useState('GCATGCG');
   const [seq2, setSeq2] = useState('GATTACA');
   const [algorithm, setAlgorithm] = useState<AlgorithmType>('global');
-  const [sequenceType, setSequenceType] = useState<SequenceType>('dna');
+
+  const handleAlgorithmChange = (newAlgorithm: AlgorithmType) => {
+    setAlgorithm(newAlgorithm);
+    onAlgorithmChange?.(newAlgorithm);
+  };
   
   // Scoring parameters
   const [match, setMatch] = useState(1);
@@ -31,20 +34,17 @@ export function SequenceInput({ onAlign }: SequenceInputProps) {
   // Validation errors
   const [errors, setErrors] = useState<{ seq1?: string; seq2?: string }>({});
 
-  const validateSequence = (seq: string, type: SequenceType): boolean => {
-    if (type === 'dna') {
-      return DNA_REGEX.test(seq);
-    }
-    return PROTEIN_REGEX.test(seq);
+  const validateDNASequence = (seq: string): boolean => {
+    return DNA_REGEX.test(seq);
   };
 
   const handleSeq1Change = (value: string) => {
     const upperValue = value.toUpperCase();
     setSeq1(upperValue);
-    if (upperValue && !validateSequence(upperValue, sequenceType)) {
+    if (upperValue && !validateDNASequence(upperValue)) {
       setErrors((prev) => ({
         ...prev,
-        seq1: `Invalid ${sequenceType === 'dna' ? 'DNA' : 'protein'} sequence`,
+        seq1: 'Invalid DNA sequence. Only A, T, C, G characters are allowed.',
       }));
     } else {
       setErrors((prev) => ({ ...prev, seq1: undefined }));
@@ -54,10 +54,10 @@ export function SequenceInput({ onAlign }: SequenceInputProps) {
   const handleSeq2Change = (value: string) => {
     const upperValue = value.toUpperCase();
     setSeq2(upperValue);
-    if (upperValue && !validateSequence(upperValue, sequenceType)) {
+    if (upperValue && !validateDNASequence(upperValue)) {
       setErrors((prev) => ({
         ...prev,
-        seq2: `Invalid ${sequenceType === 'dna' ? 'DNA' : 'protein'} sequence`,
+        seq2: 'Invalid DNA sequence. Only A, T, C, G characters are allowed.',
       }));
     } else {
       setErrors((prev) => ({ ...prev, seq2: undefined }));
@@ -86,13 +86,8 @@ export function SequenceInput({ onAlign }: SequenceInputProps) {
   };
 
   const loadExample = () => {
-    if (sequenceType === 'dna') {
-      setSeq1('GCATGCG');
-      setSeq2('GATTACA');
-    } else {
-      setSeq1('HEAGAWGHEE');
-      setSeq2('PAWHEAE');
-    }
+    setSeq1('GCATGCG');
+    setSeq2('GATTACA');
     setErrors({});
   };
 
@@ -100,30 +95,6 @@ export function SequenceInput({ onAlign }: SequenceInputProps) {
     <div className="sequence-input-container">
       <form onSubmit={handleSubmit}>
         <div className="input-section">
-          <div className="sequence-type-selector">
-            <label>Sequence Type:</label>
-            <div className="radio-group">
-              <label>
-                <input
-                  type="radio"
-                  value="dna"
-                  checked={sequenceType === 'dna'}
-                  onChange={(e) => setSequenceType(e.target.value as SequenceType)}
-                />
-                DNA
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  value="protein"
-                  checked={sequenceType === 'protein'}
-                  onChange={(e) => setSequenceType(e.target.value as SequenceType)}
-                />
-                Protein
-              </label>
-            </div>
-          </div>
-
           <div className="sequence-inputs">
             <div className="input-group">
               <label htmlFor="seq1">Sequence 1:</label>
@@ -132,7 +103,7 @@ export function SequenceInput({ onAlign }: SequenceInputProps) {
                 type="text"
                 value={seq1}
                 onChange={(e) => handleSeq1Change(e.target.value)}
-                placeholder={sequenceType === 'dna' ? 'Enter DNA sequence (A, T, C, G)' : 'Enter protein sequence'}
+                placeholder="Enter DNA sequence (A, T, C, G)"
                 className={errors.seq1 ? 'error' : ''}
               />
               {errors.seq1 && <span className="error-message">{errors.seq1}</span>}
@@ -145,7 +116,7 @@ export function SequenceInput({ onAlign }: SequenceInputProps) {
                 type="text"
                 value={seq2}
                 onChange={(e) => handleSeq2Change(e.target.value)}
-                placeholder={sequenceType === 'dna' ? 'Enter DNA sequence (A, T, C, G)' : 'Enter protein sequence'}
+                placeholder="Enter DNA sequence (A, T, C, G)"
                 className={errors.seq2 ? 'error' : ''}
               />
               {errors.seq2 && <span className="error-message">{errors.seq2}</span>}
@@ -165,7 +136,7 @@ export function SequenceInput({ onAlign }: SequenceInputProps) {
                 type="radio"
                 value="global"
                 checked={algorithm === 'global'}
-                onChange={(e) => setAlgorithm(e.target.value as AlgorithmType)}
+                onChange={(e) => handleAlgorithmChange(e.target.value as AlgorithmType)}
               />
               <div className="algorithm-info">
                 <strong>Global Alignment</strong>
@@ -179,7 +150,7 @@ export function SequenceInput({ onAlign }: SequenceInputProps) {
                 type="radio"
                 value="local"
                 checked={algorithm === 'local'}
-                onChange={(e) => setAlgorithm(e.target.value as AlgorithmType)}
+                onChange={(e) => handleAlgorithmChange(e.target.value as AlgorithmType)}
               />
               <div className="algorithm-info">
                 <strong>Local Alignment</strong>
@@ -193,7 +164,7 @@ export function SequenceInput({ onAlign }: SequenceInputProps) {
                 type="radio"
                 value="dovetail"
                 checked={algorithm === 'dovetail'}
-                onChange={(e) => setAlgorithm(e.target.value as AlgorithmType)}
+                onChange={(e) => handleAlgorithmChange(e.target.value as AlgorithmType)}
               />
               <div className="algorithm-info">
                 <strong>Dovetail Alignment</strong>
@@ -207,7 +178,7 @@ export function SequenceInput({ onAlign }: SequenceInputProps) {
                 type="radio"
                 value="banded"
                 checked={algorithm === 'banded'}
-                onChange={(e) => setAlgorithm(e.target.value as AlgorithmType)}
+                onChange={(e) => handleAlgorithmChange(e.target.value as AlgorithmType)}
               />
               <div className="algorithm-info">
                 <strong>Banded Alignment</strong>
