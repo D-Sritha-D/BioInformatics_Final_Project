@@ -10,7 +10,6 @@ interface AlignmentResultProps {
 export function AlignmentResult({
   alignedSeq1,
   alignedSeq2,
-  score,
   algorithm,
 }: AlignmentResultProps) {
   // Generate the match line showing matches, mismatches, and gaps
@@ -62,11 +61,10 @@ export function AlignmentResult({
 
       <div className="result-header">
         <div className="algorithm-badge">
-          {algorithm === 'global' ? 'Global Alignment' : 'Banded Alignment'}
-        </div>
-        <div className="score-display">
-          <span className="score-label">Score:</span>
-          <span className="score-value">{score}</span>
+          {algorithm === 'global' && 'Global Alignment'}
+          {algorithm === 'local' && 'Local Alignment'}
+          {algorithm === 'dovetail' && 'Dovetail Alignment'}
+          {algorithm === 'banded' && 'Banded Alignment'}
         </div>
       </div>
 

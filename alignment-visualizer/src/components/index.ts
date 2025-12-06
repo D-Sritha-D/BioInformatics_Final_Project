@@ -7,4 +7,4 @@ export { ScoringMatrix } from './ScoringMatrix';
 export { SuffixTree } from './SuffixTree';
 export { PhylogenyTree } from './PhylogenyTree';
 export { DistanceMatrix } from './DistanceMatrix';
-export { default as ProteinStructure } from './ProteinStructure/ProteinStructure';
+export { ProteinStructure } from './ProteinStructure';

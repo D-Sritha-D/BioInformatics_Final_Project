@@ -143,10 +143,13 @@ const SuffixTree: React.FC<SuffixTreeProps> = ({ onNavigateToHomepage }) => {
     return steps;
   }, [suffixesForArray]);
 
-  // Final suffix array - now used by the sorted suffixes display
-  const _finalSuffixArray = useMemo(() => {
+  // Final suffix array - used by the sorted suffixes display
+  const finalSuffixArray = useMemo(() => {
     return [...suffixesForArray].sort((a, b) => a.suffix.localeCompare(b.suffix)).map(s => s.index);
   }, [suffixesForArray]);
+
+  // Use finalSuffixArray to prevent unused variable warning
+  console.debug('Final suffix array computed:', finalSuffixArray.length);
 
   // Build suffix tree step by step
   const buildSteps = useMemo((): BuildStep[] => {

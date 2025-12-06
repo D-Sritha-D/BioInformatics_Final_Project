@@ -186,8 +186,8 @@
   color: white;
 }
 
-/* Step Content */
-.step-content {
+/* Step Content - Scoped to scoring-matrix-page to avoid conflicts */
+.scoring-matrix-page .step-content {
   display: flex !important;
   flex-direction: column !important;
   align-items: stretch;
@@ -197,24 +197,24 @@
   margin-bottom: clamp(16px, 3vw, 24px);
 }
 
-.step-content > * {
+.scoring-matrix-page .step-content > * {
   flex-shrink: 0;
 }
 
-.step-title-row {
+.scoring-matrix-page .step-title-row {
   display: block;
   margin-bottom: 16px;
   width: 100%;
 }
 
-.step-title-row h3 {
+.scoring-matrix-page .step-title-row h3 {
   font-size: clamp(1.1rem, 3vw, 1.5rem);
   color: #1a1f3a;
   margin: 0;
   font-weight: 700;
 }
 
-.step-description {
+.scoring-matrix-page .step-description {
   display: block;
   margin-bottom: 24px;
   padding: clamp(12px, 2vw, 20px);
@@ -225,14 +225,14 @@
   width: 100%;
 }
 
-.step-description p {
+.scoring-matrix-page .step-description p {
   font-size: clamp(0.95rem, 2vw, 1.05rem);
   color: #444;
   line-height: 1.7;
   margin: 0;
 }
 
-.step-visual {
+.scoring-matrix-page .step-visual {
   display: block;
   margin-top: 8px;
   width: 100%;
@@ -1614,7 +1614,7 @@
     font-size: 1rem;
   }
   
-  .step-content {
+  .scoring-matrix-page .step-content {
     padding: 20px;
   }
   
