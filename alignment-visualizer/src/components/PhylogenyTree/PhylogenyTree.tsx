@@ -511,13 +511,6 @@ const PhylogenyTree: React.FC<PhylogenyTreeProps> = ({ onNavigateToHomepage }) =
               <p>Build a text-based Newick string from a phylogenetic tree</p>
             </div>
 
-            <div className="example-box">
-              <h3>Example Newick String:</h3>
-              <div className="newick-display">
-                {currentNewickStep.highlightedNewick}
-              </div>
-            </div>
-
             <div className="step-content">
               <div className="step-info">
                 <div className="step-header">
@@ -525,6 +518,15 @@ const PhylogenyTree: React.FC<PhylogenyTreeProps> = ({ onNavigateToHomepage }) =
                   <h3>{currentNewickStep.title}</h3>
                 </div>
                 <p className="step-description">{currentNewickStep.description}</p>
+
+                {/* Current Newick Building Progress */}
+                <div className="newick-progress">
+                  <h4>Current Output:</h4>
+                  <div className="newick-display">
+                    {currentNewickStep.highlightedNewick}
+                  </div>
+                </div>
+
                 <div className="step-explanation">
                   <span className="explanation-icon">i</span>
                   <p>{currentNewickStep.explanation}</p>
