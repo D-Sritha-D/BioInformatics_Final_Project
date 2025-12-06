@@ -146,8 +146,26 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigateToVisualizer, onNavigateT
             visual explanations to help you understand these fundamental concepts.
           </p>
           <p className="about-credits">
-            Developed by Masters students of Computer Science.
+            Developed by Masters students of Computer Science @ UF
           </p>
+          <div className="contributors-grid">
+            <a href="https://www.linkedin.com/in/mohan-veeraghanta-9b55a1201/" target="_blank" rel="noopener noreferrer" className="contributor-card">
+              <div className="contributor-avatar">MV</div>
+              <span className="contributor-name">Mohan Veeraghanta</span>
+            </a>
+            <a href="https://www.linkedin.com/in/durga-sritha-dongla/" target="_blank" rel="noopener noreferrer" className="contributor-card">
+              <div className="contributor-avatar">SD</div>
+              <span className="contributor-name">Sritha Dongla</span>
+            </a>
+            <a href="https://www.linkedin.com/in/pavansainalluri/" target="_blank" rel="noopener noreferrer" className="contributor-card">
+              <div className="contributor-avatar">PN</div>
+              <span className="contributor-name">Pavan Sai Nalluri</span>
+            </a>
+            <a href="https://www.linkedin.com/in/subodhbhyri/" target="_blank" rel="noopener noreferrer" className="contributor-card">
+              <div className="contributor-avatar">SB</div>
+              <span className="contributor-name">Subodh Bhyri</span>
+            </a>
+          </div>
         </div>
       </section>
 

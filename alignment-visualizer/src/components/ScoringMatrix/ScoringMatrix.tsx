@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import './ScoringMatrix.css';
 
 interface ScoringMatrixProps {
@@ -9,6 +9,39 @@ const ScoringMatrix: React.FC<ScoringMatrixProps> = ({ onNavigateToHomepage }) =
   const [activeTab, setActiveTab] = useState<'pam' | 'blosum'>('pam');
   const [pamStep, setPamStep] = useState(0);
   const [blosumStep, setBlosumStep] = useState(0);
+  
+  // Refs for scrolling to step content
+  const pamStepContentRef = useRef<HTMLDivElement>(null);
+  const blosumStepContentRef = useRef<HTMLDivElement>(null);
+
+  // Scroll helper function
+  const scrollToStepContent = useCallback((ref: React.RefObject<HTMLDivElement | null>) => {
+    setTimeout(() => {
+      ref.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 50);
+  }, []);
+
+  // PAM step navigation handlers
+  const handlePamPrev = useCallback(() => {
+    setPamStep(prev => Math.max(0, prev - 1));
+    scrollToStepContent(pamStepContentRef);
+  }, [scrollToStepContent]);
+
+  const handlePamNext = useCallback(() => {
+    setPamStep(prev => Math.min(pamSteps.length - 1, prev + 1));
+    scrollToStepContent(pamStepContentRef);
+  }, [scrollToStepContent]);
+
+  // BLOSUM step navigation handlers
+  const handleBlosumPrev = useCallback(() => {
+    setBlosumStep(prev => Math.max(0, prev - 1));
+    scrollToStepContent(blosumStepContentRef);
+  }, [scrollToStepContent]);
+
+  const handleBlosumNext = useCallback(() => {
+    setBlosumStep(prev => Math.min(blosumSteps.length - 1, prev + 1));
+    scrollToStepContent(blosumStepContentRef);
+  }, [scrollToStepContent]);
 
   const pamSteps = [
     {
@@ -817,7 +850,7 @@ const ScoringMatrix: React.FC<ScoringMatrixProps> = ({ onNavigateToHomepage }) =
             </div>
 
             {/* Current Step Content */}
-            <div className="step-content">
+            <div className="step-content" ref={pamStepContentRef}>
               <div className="step-title-row">
                 <h3>{pamSteps[pamStep].title}</h3>
               </div>
@@ -833,7 +866,7 @@ const ScoringMatrix: React.FC<ScoringMatrixProps> = ({ onNavigateToHomepage }) =
             <div className="step-navigation">
               <button 
                 className="nav-button prev"
-                onClick={() => setPamStep(Math.max(0, pamStep - 1))}
+                onClick={handlePamPrev}
                 disabled={pamStep === 0}
               >
                 ← Previous
@@ -841,7 +874,7 @@ const ScoringMatrix: React.FC<ScoringMatrixProps> = ({ onNavigateToHomepage }) =
               <span className="step-indicator">{pamStep + 1} / {pamSteps.length}</span>
               <button 
                 className="nav-button next"
-                onClick={() => setPamStep(Math.min(pamSteps.length - 1, pamStep + 1))}
+                onClick={handlePamNext}
                 disabled={pamStep === pamSteps.length - 1}
               >
                 Next →
@@ -877,7 +910,7 @@ const ScoringMatrix: React.FC<ScoringMatrixProps> = ({ onNavigateToHomepage }) =
             </div>
 
             {/* Current Step Content */}
-            <div className="step-content">
+            <div className="step-content" ref={blosumStepContentRef}>
               <div className="step-title-row">
                 <h3>{blosumSteps[blosumStep].title}</h3>
               </div>
@@ -893,7 +926,7 @@ const ScoringMatrix: React.FC<ScoringMatrixProps> = ({ onNavigateToHomepage }) =
             <div className="step-navigation">
               <button 
                 className="nav-button prev"
-                onClick={() => setBlosumStep(Math.max(0, blosumStep - 1))}
+                onClick={handleBlosumPrev}
                 disabled={blosumStep === 0}
               >
                 ← Previous
@@ -901,7 +934,7 @@ const ScoringMatrix: React.FC<ScoringMatrixProps> = ({ onNavigateToHomepage }) =
               <span className="step-indicator">{blosumStep + 1} / {blosumSteps.length}</span>
               <button 
                 className="nav-button next"
-                onClick={() => setBlosumStep(Math.min(blosumSteps.length - 1, blosumStep + 1))}
+                onClick={handleBlosumNext}
                 disabled={blosumStep === blosumSteps.length - 1}
               >
                 Next →
