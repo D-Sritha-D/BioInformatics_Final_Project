@@ -613,12 +613,8 @@ const SuffixTree: React.FC<SuffixTreeProps> = ({ onNavigateToHomepage }) => {
 
             {/* Current Step Info */}
             {buildSteps[currentStep] && (
-              <div className="step-content">
-                <div className="step-title-row">
-                  <h3>Step {buildSteps[currentStep].stepNumber}: Insert Suffix</h3>
-                </div>
-
-                {/* Visual indicator showing current index in sequence */}
+              <>
+                {/* Current Suffix Position - Full width on top */}
                 <div className="current-index-indicator">
                   <h4>Current Suffix Position in Sequence:</h4>
                   <div className="sequence-with-indicator">
@@ -639,42 +635,57 @@ const SuffixTree: React.FC<SuffixTreeProps> = ({ onNavigateToHomepage }) => {
                   </div>
                 </div>
 
-                <div className="step-description">
-                  <p>
-                    <strong>Suffix:</strong> "{buildSteps[currentStep].suffix}" 
-                    <span className="suffix-position">(starting at position {buildSteps[currentStep].suffixIndex})</span>
-                  </p>
-                  <p className="step-explanation">
-                    {getStepExplanation(currentStep, buildSteps[currentStep], buildSteps.length)}
-                  </p>
-                </div>
+                {/* Side-by-side layout: Tree on left, Explanation+Navigation on right */}
+                <div className="step-content-wrapper">
+                  {/* Tree on the left */}
+                  <div className="tree-panel">
+                    <div className="tree-visualization">
+                      <div className="tree-text-container">
+                        {currentTree && renderTreeText(currentTree)}
+                      </div>
+                    </div>
+                  </div>
 
-                <div className="tree-visualization">
-                  <div className="tree-text-container">
-                    {currentTree && renderTreeText(currentTree)}
+                  {/* Explanation and navigation on the right */}
+                  <div className="info-panel">
+                    <div className="step-content">
+                      <div className="step-title-row">
+                        <h3>Step {buildSteps[currentStep].stepNumber}: Insert Suffix</h3>
+                      </div>
+
+                      <div className="step-description">
+                        <p>
+                          <strong>Suffix:</strong> "{buildSteps[currentStep].suffix}" 
+                          <span className="suffix-position">(starting at position {buildSteps[currentStep].suffixIndex})</span>
+                        </p>
+                        <p className="step-explanation">
+                          {getStepExplanation(currentStep, buildSteps[currentStep], buildSteps.length)}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Step Navigation */}
+                    <div className="step-navigation">
+                      <button 
+                        className="nav-button prev"
+                        onClick={() => setCurrentStep(Math.max(0, currentStep - 1))}
+                        disabled={currentStep === 0}
+                      >
+                        ← Previous
+                      </button>
+                      <span className="step-indicator">{currentStep + 1} / {buildSteps.length}</span>
+                      <button 
+                        className="nav-button next"
+                        onClick={() => setCurrentStep(Math.min(buildSteps.length - 1, currentStep + 1))}
+                        disabled={currentStep === buildSteps.length - 1}
+                      >
+                        Next →
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </>
             )}
-
-            {/* Step Navigation */}
-            <div className="step-navigation">
-              <button 
-                className="nav-button prev"
-                onClick={() => setCurrentStep(Math.max(0, currentStep - 1))}
-                disabled={currentStep === 0}
-              >
-                ← Previous
-              </button>
-              <span className="step-indicator">{currentStep + 1} / {buildSteps.length}</span>
-              <button 
-                className="nav-button next"
-                onClick={() => setCurrentStep(Math.min(buildSteps.length - 1, currentStep + 1))}
-                disabled={currentStep === buildSteps.length - 1}
-              >
-                Next →
-              </button>
-            </div>
           </section>
         )}
 
