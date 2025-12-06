@@ -14,9 +14,10 @@ interface HomepageProps {
   onNavigateToSuffixTree?: () => void;
   onNavigateToPhylogeny?: () => void;
   onNavigateToDistanceMatrix?: () => void;
+  onNavigateToProteinStructure?: () => void;
 }
 
-const Homepage: React.FC<HomepageProps> = ({ onNavigateToVisualizer, onNavigateToScoringMatrix, onNavigateToSuffixTree, onNavigateToPhylogeny, onNavigateToDistanceMatrix }) => {
+const Homepage: React.FC<HomepageProps> = ({ onNavigateToVisualizer, onNavigateToScoringMatrix, onNavigateToSuffixTree, onNavigateToPhylogeny, onNavigateToDistanceMatrix, onNavigateToProteinStructure }) => {
   const concepts: ConceptCard[] = [
     {
     id: 'global-alignment',
@@ -27,7 +28,7 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigateToVisualizer, onNavigateT
     {
     id: 'protein-folding',
     title: 'Protein Structure Prediction',
-    description: 'Predict secondary or tertiary structures from amino-acid sequences using classical or computational methods.',
+    description: 'Explore genetic algorithms and hill climbing to optimize folding-related computations.',
     icon: '🔗'
     },
     {
@@ -77,6 +78,10 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigateToVisualizer, onNavigateT
     // Navigate to distance matrix page
     if (conceptId === 'distance-matrix' && onNavigateToDistanceMatrix) {
       onNavigateToDistanceMatrix();
+    }
+    // Navigate to protein structure page
+    if (conceptId === 'protein-folding' && onNavigateToProteinStructure) {
+      onNavigateToProteinStructure();
     }
   };
 
@@ -157,4 +162,3 @@ const Homepage: React.FC<HomepageProps> = ({ onNavigateToVisualizer, onNavigateT
 };
 
 export default Homepage;
-

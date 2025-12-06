@@ -9,6 +9,7 @@ import {
   SuffixTree,
   PhylogenyTree,
   DistanceMatrix,
+  ProteinStructure,
 } from './components';
 import { globalAlignment, localAlignment, dovetailAlignment, bandedAlignment } from './algorithms';
 import type {
@@ -19,7 +20,7 @@ import type {
 } from './types';
 import './App.css';
 
-type PageType = 'homepage' | 'alignment' | 'scoring-matrix' | 'suffix-tree' | 'phylogeny' | 'distance-matrix';
+type PageType = 'homepage' | 'alignment' | 'scoring-matrix' | 'suffix-tree' | 'phylogeny' | 'distance-matrix' | 'protein-structure';
 
 // Helper function to get page from URL hash
 const getPageFromHash = (): PageType => {
@@ -129,6 +130,10 @@ function App() {
     setCurrentPage('distance-matrix');
   }, []);
 
+  const handleNavigateToProteinStructure = useCallback(() => {
+    setCurrentPage('protein-structure');
+  }, []);
+
   const handleAlgorithmChange = useCallback((algo: AlgorithmType) => {
     setAlgorithm(algo);
     // Clear previous results to avoid confusion when switching algorithms
@@ -145,6 +150,7 @@ function App() {
         onNavigateToSuffixTree={handleNavigateToSuffixTree}
         onNavigateToPhylogeny={handleNavigateToPhylogeny}
         onNavigateToDistanceMatrix={handleNavigateToDistanceMatrix}
+        onNavigateToProteinStructure={handleNavigateToProteinStructure}
       />
     );
   }
@@ -163,6 +169,10 @@ function App() {
 
   if (currentPage === 'distance-matrix') {
     return <DistanceMatrix onNavigateToHomepage={handleNavigateToHomepage} />;
+  }
+
+  if (currentPage === 'protein-structure') {
+    return <ProteinStructure onNavigateToHomepage={handleNavigateToHomepage} />;
   }
 
   return (
