@@ -406,10 +406,16 @@
 
 /* Step Content */
 .step-content {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr));
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
   gap: clamp(16px, 3vw, 32px);
   margin-bottom: clamp(16px, 3vw, 24px);
+}
+
+.step-content > .step-info,
+.step-content > .tree-visualization {
+  width: 100%;
+  min-width: 0;
 }
 
 .canonical-content {

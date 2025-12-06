@@ -355,18 +355,29 @@
 
 /* Final Tree Section */
 .final-tree-section h2 {
-  font-size: 1.75rem;
+  font-size: clamp(1.25rem, 4vw, 1.75rem);
   color: #1a1f3a;
-  margin-bottom: 24px;
+  margin-bottom: clamp(16px, 3vw, 24px);
   text-align: center;
+}
+
+.final-tree-section .tree-visualization {
+  background: #1a1f3a;
+  border-radius: clamp(12px, 2vw, 16px);
+  padding: clamp(16px, 3vw, 32px);
+  margin-bottom: clamp(16px, 3vw, 24px);
+  overflow: auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  min-height: clamp(200px, 40vh, 400px);
+  max-height: 70vh;
 }
 
 /* Tree Visualization */
 .tree-visualization {
   background: #1a1f3a;
-  border-radius: 16px;
-  padding: 32px;
-  margin-bottom: 24px;
+  border-radius: clamp(12px, 2vw, 16px);
+  padding: clamp(16px, 3vw, 32px);
+  margin-bottom: clamp(16px, 3vw, 24px);
   overflow-x: auto;
 }
 
@@ -593,34 +604,133 @@
   color: white;
 }
 
+/* Step Content Wrapper - Side by Side Layout */
+.step-content-wrapper {
+  display: grid;
+  grid-template-columns: 1fr minmax(280px, 400px);
+  gap: clamp(16px, 3vw, 24px);
+  align-items: start;
+}
+
+.tree-panel {
+  overflow: hidden;
+}
+
+.tree-panel .tree-visualization {
+  background: #1a1f3a;
+  border-radius: clamp(12px, 2vw, 16px);
+  padding: clamp(16px, 3vw, 24px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  min-height: clamp(250px, 40vh, 400px);
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.info-panel {
+  position: sticky;
+  top: clamp(16px, 3vw, 24px);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(12px, 2vw, 16px);
+}
+
+.info-panel .step-navigation {
+  margin-top: 0;
+}
+
 /* Step Content */
 .step-content {
   background: linear-gradient(135deg, #f8f9fc 0%, #f0f2f5 100%);
   border-radius: 16px;
-  padding: 32px;
-  margin-bottom: 24px;
+  padding: clamp(16px, 3vw, 32px);
+  margin-bottom: 0;
+  display: block;
+}
+
+/* Info panel specific styling - unified box with rows */
+.info-panel .step-content {
+  display: block !important;
+  background: white;
+  border-radius: clamp(8px, 1.5vw, 12px);
+  padding: clamp(12px, 3vw, 24px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.info-panel .step-title-row {
+  display: block;
+  width: 100%;
+  margin-bottom: clamp(8px, 2vw, 12px);
+}
+
+.info-panel .step-title-row h3 {
+  font-size: clamp(1.1rem, 2.5vw, 1.3rem);
+  color: #1a1f3a;
+  margin: 0;
+  font-weight: 700;
+}
+
+.info-panel .step-description {
+  display: block;
+  width: 100%;
+  margin-bottom: 0;
+  padding: 0;
+  background: transparent;
+  border-radius: 0;
+  border-left: none;
+}
+
+.info-panel .step-description p {
+  font-size: clamp(0.9rem, 2vw, 1rem);
+  color: #444;
+  line-height: 1.6;
+  margin: 0 0 clamp(8px, 2vw, 12px) 0;
+}
+
+.info-panel .step-description p:last-child {
+  margin-bottom: 0;
+}
+
+.info-panel .step-description strong {
+  color: #2d1b4e;
+}
+
+.info-panel .suffix-position {
+  display: block;
+  color: #888;
+  font-size: 0.85rem;
+  margin-top: 4px;
+  margin-left: 0;
+}
+
+.info-panel .step-explanation {
+  margin-top: clamp(8px, 2vw, 12px);
+  padding-top: clamp(8px, 2vw, 12px);
+  border-top: 1px solid #e5e7eb;
+  color: #555 !important;
+  font-style: italic;
+  font-size: clamp(0.85rem, 1.8vw, 0.95rem);
 }
 
 .step-title-row h3 {
-  font-size: 1.5rem;
+  font-size: clamp(1.1rem, 3vw, 1.5rem);
   color: #1a1f3a;
-  margin: 0 0 16px 0;
+  margin: 0 0 clamp(12px, 2vw, 16px) 0;
   font-weight: 700;
 }
 
 .step-description {
-  margin-bottom: 24px;
-  padding: 16px 20px;
+  margin-bottom: clamp(16px, 3vw, 24px);
+  padding: clamp(12px, 2vw, 16px) clamp(14px, 2.5vw, 20px);
   background: white;
-  border-radius: 10px;
+  border-radius: clamp(8px, 1.5vw, 10px);
   border-left: 4px solid #2d1b4e;
 }
 
 .step-description p {
-  font-size: 1.05rem;
+  font-size: clamp(0.9rem, 2vw, 1.05rem);
   color: #444;
   line-height: 1.7;
-  margin: 0 0 8px 0;
+  margin: 0 0 clamp(6px, 1vw, 8px) 0;
 }
 
 .step-description p:last-child {
@@ -649,6 +759,16 @@
   align-items: center;
   gap: 24px;
   margin-top: 24px;
+}
+
+/* Info panel navigation - more compact */
+.info-panel .step-navigation {
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  margin-top: 0;
+  gap: 16px;
 }
 
 .nav-button {
@@ -919,6 +1039,20 @@
 }
 
 /* Responsive */
+@media (max-width: 900px) {
+  .step-content-wrapper {
+    grid-template-columns: 1fr;
+  }
+  
+  .info-panel {
+    position: static;
+  }
+  
+  .tree-panel .tree-visualization {
+    max-height: 50vh;
+  }
+}
+
 @media (max-width: 768px) {
   .suffix-tree-page .page-header h1 {
     font-size: 1.75rem;
