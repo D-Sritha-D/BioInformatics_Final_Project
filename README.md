@@ -1,34 +1,130 @@
-# 🧬 BioInsight: Algorithm Visualizer
+# 🧬 Bio Insights
 
-## Overview
-An interactive web-based educational tool for visualizing and understanding fundamental sequence alignment algorithms in bioinformatics. This tool provides step-by-step visualizations of key algorithms, making abstract algorithmic concepts concrete through visualization.
+An interactive web-based educational tool for visualizing and understanding fundamental bioinformatics algorithms. This tool provides step-by-step visualizations of key algorithms, making abstract concepts concrete through interactive visualization.
 
-## 🎯 Features
+---
 
-### Alignment Algorithms (Implemented)
-- **Global Alignment (Needleman-Wunsch)** - Aligns entire sequences end-to-end
-- **Banded Alignment** - Optimized alignment within a diagonal band
+## 👥 Contributors
 
-### Coming Soon
-- Local Alignment (Smith-Waterman)
-- Dovetail Alignment
-- Scoring Matrices (BLOSUM, PAM)
+Developed by Masters students of Computer Science:
+
+| Name | LinkedIn |
+|------|----------|
+| **Mohan Veeraghanta** | [LinkedIn](https://www.linkedin.com/in/mohan-veeraghanta-9b55a1201/) |
+| **Sritha Dongla** | [LinkedIn](https://www.linkedin.com/in/durga-sritha-dongla/) |
+| **Pavan Sai Nalluri** | [LinkedIn](https://www.linkedin.com/in/pavansainalluri/) |
+| **Subodh Bhyri** | [LinkedIn](https://www.linkedin.com/in/subodhbhyri/) |
+
+---
+
+## 📁 Project Structure
+
+```
+BioInformatics_Final_Project/
+├── alignment-visualizer/          # Main React application
+│   ├── src/
+│   │   ├── algorithms/            # Algorithm implementations
+│   │   │   ├── global/            # Needleman-Wunsch (Global Alignment)
+│   │   │   ├── local/             # Smith-Waterman (Local Alignment)
+│   │   │   ├── banded/            # Banded Alignment
+│   │   │   └── dovetail/          # Dovetail Alignment
+│   │   ├── components/            # React UI components
+│   │   │   ├── Homepage/          # Landing page
+│   │   │   ├── SequenceInput/     # Sequence input form
+│   │   │   ├── AlignmentMatrix/   # DP matrix visualization
+│   │   │   ├── AlignmentResult/   # Alignment output display
+│   │   │   ├── StepVisualizer/    # Step-by-step controls
+│   │   │   ├── ScoringMatrix/     # PAM & BLOSUM matrices
+│   │   │   ├── SuffixTree/        # Suffix Tree & Array visualization
+│   │   │   ├── PhylogenyTree/     # Phylogenetic tree builder
+│   │   │   ├── DistanceMatrix/    # UPGMA clustering
+│   │   │   └── ProteinStructure/  # Protein folding visualization
+│   │   ├── types/                 # TypeScript type definitions
+│   │   ├── App.tsx                # Main application component
+│   │   └── main.tsx               # Application entry point
+│   ├── public/                    # Static assets
+│   ├── package.json               # Dependencies and scripts
+│   └── vite.config.ts             # Vite configuration
+└── README.md                      # This file
+```
+
+---
+
+## 📦 Dependencies
+
+### Core
+| Package | Version | Purpose |
+|---------|---------|---------|
+| React | ^19.2.0 | UI framework |
+| React DOM | ^19.2.0 | DOM rendering |
+| react-d3-tree | ^3.6.6 | Tree visualization |
+
+### Development
+| Package | Version | Purpose |
+|---------|---------|---------|
+| TypeScript | ~5.9.3 | Type-safe JavaScript |
+| Vite (rolldown) | 7.2.5 | Build tool & dev server |
+| ESLint | ^9.39.1 | Code linting |
+
+---
+
+## 🎯 Main Features
+
+### 1. Sequence Alignment
+- **Global Alignment (Needleman-Wunsch)** – Aligns entire sequences end-to-end
+- **Local Alignment (Smith-Waterman)** – Finds best matching subsequences
+- **Banded Alignment** – Optimized alignment within a diagonal band
+- **Dovetail Alignment** – Overlap alignment for sequence assembly
+
+### 2. Scoring Matrices
+- **PAM Matrices** – Step-by-step construction from evolutionary model
+- **BLOSUM Matrices** – Direct computation from protein blocks
+- **Interactive comparison** – Side-by-side PAM vs BLOSUM analysis
+
+### 3. Suffix Tree & Suffix Array
+- **Visual tree construction** – Step-by-step suffix tree building
+- **Suffix array generation** – Sorted suffix visualization
+- **Pattern matching** – Understanding string indexing structures
+
+### 4. Phylogenetic Trees
+- **Newick format parsing** – Standard tree notation
+- **Canonical Newick** – Normalized tree representation
+- **Interactive tree visualization** – Expandable/collapsible nodes
+
+### 5. Distance Matrix & UPGMA
+- **Distance matrix computation** – Pairwise sequence distances
+- **UPGMA clustering** – Hierarchical tree construction
+- **Step-by-step merging** – Visual cluster formation
+
+### 6. Protein Structure
+- **Genetic algorithm optimization** – Folding simulation
+- **Hill climbing** – Local search optimization
+- **Energy minimization** – Structure prediction concepts
 
 ### Interactive Features
-- Input custom DNA or protein sequences
-- Adjust scoring parameters (match, mismatch, gap penalties)
-- Step-by-step matrix filling visualization
-- Traceback path highlighting
-- Alignment statistics (identity, coverage, gaps)
+- ✅ Custom sequence input (DNA/Protein)
+- ✅ Adjustable scoring parameters
+- ✅ Step-by-step visualization with auto-play
+- ✅ Traceback path highlighting
+- ✅ Alignment statistics (identity, coverage, gaps)
+- ✅ Responsive design for all devices
 
-## 🚀 Installation
+---
+
+## 🚀 How to Run
+
+### Prerequisites
+- Node.js (v18 or higher)
+- npm (v9 or higher)
+
+### Installation
 
 ```bash
 # Clone the repository
 git clone https://github.com/D-Sritha-D/BioInformatics_Final_Project.git
 cd BioInformatics_Final_Project
 
-# Navigate to the alignment visualizer
+# Navigate to the application
 cd alignment-visualizer
 
 # Install dependencies
@@ -38,50 +134,26 @@ npm install
 npm run dev
 ```
 
-## 📁 Project Structure
+The application will be available at `http://localhost:5173`
 
-```
-Project/
-├── alignment-visualizer/     # React application
-│   ├── src/
-│   │   ├── algorithms/       # Alignment algorithm implementations
-│   │   │   ├── global/       # Needleman-Wunsch algorithm
-│   │   │   └── banded/       # Banded alignment algorithm
-│   │   ├── components/       # React UI components
-│   │   │   ├── SequenceInput/
-│   │   │   ├── AlignmentMatrix/
-│   │   │   ├── AlignmentResult/
-│   │   │   └── StepVisualizer/
-│   │   ├── types/            # TypeScript type definitions
-│   │   ├── App.tsx           # Main application component
-│   │   └── main.tsx          # Application entry point
-│   ├── package.json
-│   └── vite.config.ts
-└── README.md
+### Build for Production
+
+```bash
+# Create production build
+npm run build
+
+# Preview production build locally
+npm run preview
 ```
 
-## 🛠️ Tech Stack
+### Other Commands
 
-- **React** - UI framework
-- **TypeScript** - Type-safe JavaScript
-- **Vite** - Build tool and dev server
-- **CSS3** - Styling with modern features
+```bash
+# Run linting
+npm run lint
+```
 
-## 📖 Algorithm Details
-
-### Global Alignment (Needleman-Wunsch)
-The Needleman-Wunsch algorithm finds the optimal global alignment between two sequences using dynamic programming.
-
-- **Time Complexity:** O(m × n)
-- **Space Complexity:** O(m × n)
-- **Use Case:** Comparing sequences of similar length
-
-### Banded Alignment
-An optimization that only considers cells within a diagonal band of width k.
-
-- **Time Complexity:** O(k × n)
-- **Space Complexity:** O(k × n)
-- **Use Case:** Similar sequences where gaps are limited
+---
 
 ## 🎓 Educational Purpose
 
@@ -89,16 +161,11 @@ This tool is designed as a pedagogical resource for students learning bioinforma
 - Visual representation of dynamic programming matrices
 - Step-by-step algorithm execution
 - Interactive parameter adjustment
-- Real-time visualization of alignment results
+- Real-time visualization of results
+- Comprehensive explanations at each step
 
-## 👥 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
+---
 
 ## 📄 License
 
 This project is licensed under the MIT License.
-
-## 📬 Contact
-
-For questions or feedback, please contact the project maintainers.
