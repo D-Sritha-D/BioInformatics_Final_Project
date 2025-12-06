@@ -25,7 +25,15 @@ type PageType = 'homepage' | 'alignment' | 'scoring-matrix' | 'suffix-tree' | 'p
 // Helper function to get page from URL hash
 const getPageFromHash = (): PageType => {
   const hash = window.location.hash.slice(1); // Remove the '#'
-  const validPages: PageType[] = ['homepage', 'alignment', 'scoring-matrix', 'suffix-tree', 'phylogeny', 'distance-matrix'];
+  const validPages: PageType[] = [
+    'homepage',
+    'alignment',
+    'scoring-matrix',
+    'suffix-tree',
+    'phylogeny',
+    'distance-matrix',
+    'protein-structure',
+  ];
   return validPages.includes(hash as PageType) ? (hash as PageType) : 'homepage';
 };
 
