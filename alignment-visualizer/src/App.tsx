@@ -116,30 +116,37 @@ function App() {
     setCurrentStep(undefined);
     setIsPlaying(false);
     setAlgorithm('global');
+    window.scrollTo(0, 0);
   }, []);
 
   const handleNavigateToHomepage = useCallback(() => {
     setCurrentPage('homepage');
+    window.scrollTo(0, 0);
   }, []);
 
   const handleNavigateToScoringMatrix = useCallback(() => {
     setCurrentPage('scoring-matrix');
+    window.scrollTo(0, 0);
   }, []);
 
   const handleNavigateToSuffixTree = useCallback(() => {
     setCurrentPage('suffix-tree');
+    window.scrollTo(0, 0);
   }, []);
 
   const handleNavigateToPhylogeny = useCallback(() => {
     setCurrentPage('phylogeny');
+    window.scrollTo(0, 0);
   }, []);
 
   const handleNavigateToDistanceMatrix = useCallback(() => {
     setCurrentPage('distance-matrix');
+    window.scrollTo(0, 0);
   }, []);
 
   const handleNavigateToProteinStructure = useCallback(() => {
     setCurrentPage('protein-structure');
+    window.scrollTo(0, 0);
   }, []);
 
   const handleAlgorithmChange = useCallback((algo: AlgorithmType) => {
